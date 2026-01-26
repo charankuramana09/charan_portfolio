@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g1)" rx="24"/>
+  <g fill="rgba(255,255,255,0.9)" font-family="Inter, sans-serif" font-size="28">
+    <text x="40" y="80">Project Sample</text>
+    <text x="40" y="120" font-size="16">React • TypeScript • Spring Boot</text>
+  </g>
+</svg>
