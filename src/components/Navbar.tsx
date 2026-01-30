@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
 const navItems = [
     { label: 'Home', href: '#home' },
     { label: 'About', href: '#about' },
-    { label: 'Projects', href: '#projects' },
+    { label: 'Projects', href: '/projects', isRoute: true },
     { label: 'Skills', href: '#skills' },
+    { label: 'Certifications', href: '#certifications' },
     { label: 'Experience', href: '#experience' },
     { label: 'Contact', href: '#contact' },
+    { label: 'Blog', href: '/blog', isRoute: true },
 ];
 
 export default function Navbar() {
     const [theme, setTheme] = useState<'light' | 'dark'>(() => (typeof window !== 'undefined' && document.documentElement.classList.contains('dark')) ? 'dark' : 'light');
     const [mobileOpen, setMobileOpen] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -36,15 +42,35 @@ export default function Navbar() {
                 <a href="#home" className="font-bold text-xl text-primary-600 dark:text-primary-400 tracking-tight">Charan</a>
                 {/* Desktop Nav */}
                 <div className="hidden md:flex gap-6 items-center">
-                    {navItems.map((item) => (
-                        <a
-                            key={item.href}
-                            href={item.href}
-                            className="text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors px-2 py-1 rounded"
-                        >
-                            {item.label}
-                        </a>
-                    ))}
+                    {navItems.map((item) => {
+                        if (item.isRoute) {
+                            return (
+                                <Link
+                                    key={item.href}
+                                    to={item.href}
+                                    className="text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors px-2 py-1 rounded"
+                                >
+                                    {item.label}
+                                </Link>
+                            );
+                        } else {
+                            return (
+                                <a
+                                    key={item.href}
+                                    href={item.href}
+                                    className="text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors px-2 py-1 rounded"
+                                    onClick={e => {
+                                        if (location.pathname !== '/') {
+                                            e.preventDefault();
+                                            navigate('/' + item.href);
+                                        }
+                                    }}
+                                >
+                                    {item.label}
+                                </a>
+                            );
+                        }
+                    })}
                     <button
                         aria-label="Toggle theme"
                         aria-pressed={theme === 'dark'}
@@ -83,16 +109,37 @@ export default function Navbar() {
                         </button>
                     </div>
                     <div className="flex flex-col gap-4">
-                        {navItems.map((item) => (
-                            <a
-                                key={item.href}
-                                href={item.href}
-                                className="text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 font-medium text-lg transition-colors px-2 py-1 rounded"
-                                onClick={() => setMobileOpen(false)}
-                            >
-                                {item.label}
-                            </a>
-                        ))}
+                        {navItems.map((item) => {
+                            if (item.isRoute) {
+                                return (
+                                    <Link
+                                        key={item.href}
+                                        to={item.href}
+                                        className="text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 font-medium text-lg transition-colors px-2 py-1 rounded"
+                                        onClick={() => setMobileOpen(false)}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                );
+                            } else {
+                                return (
+                                    <a
+                                        key={item.href}
+                                        href={item.href}
+                                        className="text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 font-medium text-lg transition-colors px-2 py-1 rounded"
+                                        onClick={e => {
+                                            setMobileOpen(false);
+                                            if (location.pathname !== '/') {
+                                                e.preventDefault();
+                                                navigate('/' + item.href);
+                                            }
+                                        }}
+                                    >
+                                        {item.label}
+                                    </a>
+                                );
+                            }
+                        })}
                         <button
                             aria-label="Toggle theme"
                             aria-pressed={theme === 'dark'}
