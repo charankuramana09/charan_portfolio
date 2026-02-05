@@ -1,166 +1,309 @@
 import React, { useState } from 'react'
 import { contact } from '../data/portfolio'
-
-function EmailIcon() {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-6 h-6">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-            <polyline points="22,6 12,13 2,6" />
-        </svg>
-    )
-}
-function LinkedInIcon() {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-6 h-6">
-            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-            <rect x="2" y="9" width="4" height="12" />
-            <circle cx="4" cy="4" r="2" />
-        </svg>
-    )
-}
-function LocationIcon() {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-6 h-6">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-            <circle cx="12" cy="10" r="3" />
-        </svg>
-    )
-}
-function SendIcon() {
-    return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-            <line x1="22" y1="2" x2="11" y2="13" />
-            <polygon points="22 2 15 22 11 13 2 9 22 2" />
-        </svg>
-    )
-}
+import { Mail, Linkedin, MapPin, Send, Check, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import emailjs from '@emailjs/browser';
+import { useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 
 export default function Contact() {
+    const navigate = useNavigate();
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [subject, setSubject] = useState('')
     const [message, setMessage] = useState('')
+    const [honeypot, setHoneypot] = useState('')
     const [loading, setLoading] = useState(false)
     const [success, setSuccess] = useState(false)
+    const [error, setError] = useState('')
     const maxLength = 1000
 
-    function handleSubmit(e: React.FormEvent) {
+    // EmailJS Configuration
+    const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_50hg2mv';
+    const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_9mf693q';
+    const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'iNzV48aeRZ_-uyO44';
+
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
-        if (!message.trim()) return alert('Please enter a message')
+
+        // Anti-spam check
+        if (honeypot) {
+            console.log('Spam detected');
+            setSuccess(true); // Pretend success to fool bots
+            return;
+        }
+
+        if (!message.trim()) {
+            setError('Please enter a message');
+            return;
+        }
+
         setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-            setSuccess(true)
-            setName('')
-            setEmail('')
-            setSubject('')
-            setMessage('')
-            setTimeout(() => setSuccess(false), 3000)
-        }, 2000)
-        // Uncomment for real mailto:
-        // const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0A${encodeURIComponent(message)}`
-        // const mailto = `mailto:${contact.email}?subject=${encodeURIComponent(subject || 'Portfolio contact')}&body=${body}`
-        // window.location.href = mailto
+        setError('')
+
+        try {
+            // Sanitize inputs
+            const sanitizedName = DOMPurify.sanitize(name);
+            const sanitizedEmail = DOMPurify.sanitize(email);
+            const sanitizedSubject = DOMPurify.sanitize(subject || 'Portfolio Contact');
+            const sanitizedMessage = DOMPurify.sanitize(message);
+
+            const templateParams = {
+                from_name: sanitizedName,
+                from_email: sanitizedEmail,
+                name: sanitizedName, // Used in user's playground
+                email: sanitizedEmail, // Used in user's playground
+                subject: sanitizedSubject,
+                title: sanitizedSubject, // Map subject to title as used in playground
+                message: sanitizedMessage,
+                time: new Date().toLocaleString(), // Used in user's playground
+                to_name: 'Charan',
+                reply_to: sanitizedEmail,
+            };
+
+            // Send email using EmailJS
+            const result = await emailjs.send(
+                EMAILJS_SERVICE_ID,
+                EMAILJS_TEMPLATE_ID,
+                templateParams,
+                {
+                    publicKey: EMAILJS_PUBLIC_KEY,
+                }
+            );
+
+            console.log('Email sent successfully:', result);
+            setSuccess(true);
+
+            // Redirect to Thank You page
+            setTimeout(() => {
+                navigate('/thank-you');
+            }, 1000);
+
+            // Reset form
+            setName('');
+            setEmail('');
+            setSubject('');
+            setMessage('');
+        } catch (err: any) {
+            console.error('Failed to send email:', err);
+            const errorMsg = err?.text || err?.message || 'Unknown error';
+            setError(`Failed to send: ${errorMsg}. Fallback: ${contact.email}`);
+
+            // Hide error after 8 seconds
+            setTimeout(() => setError(''), 8000);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
-        <section id="contact" className="max-w-[1400px] mx-auto px-4 py-20 relative">
+        <section id="contact" className="max-w-[1400px] mx-auto px-4 py-20 relative overflow-hidden">
             {/* Background decorations */}
-            <div className="hidden md:block fixed w-[500px] h-[500px] bg-indigo-400 rounded-full blur-[100px] opacity-10 top-[10%] left-[5%] z-[-1] animate-[floatSlow_25s_ease-in-out_infinite] pointer-events-none" />
-            <div className="hidden md:block fixed w-[400px] h-[400px] bg-purple-500 rounded-full blur-[100px] opacity-10 bottom-[10%] right-[5%] z-[-1] animate-[floatSlow_20s_ease-in-out_infinite_reverse] pointer-events-none" />
-            <div className="hidden md:block fixed w-[350px] h-[350px] bg-pink-300 rounded-full blur-[100px] opacity-10 top-1/2 right-[20%] z-[-1] animate-[floatSlow_30s_ease-in-out_5s_infinite] pointer-events-none" />
+            <div className="hidden md:block fixed w-[500px] h-[500px] bg-indigo-400/20 dark:bg-indigo-400 rounded-full blur-[100px] opacity-20 dark:opacity-10 top-[10%] left-[5%] z-[-1] animate-[floatSlow_25s_ease-in-out_infinite] pointer-events-none" />
+            <div className="hidden md:block fixed w-[400px] h-[400px] bg-purple-500/20 dark:bg-purple-500 rounded-full blur-[100px] opacity-20 dark:opacity-10 bottom-[10%] right-[5%] z-[-1] animate-[floatSlow_20s_ease-in-out_infinite_reverse] pointer-events-none" />
 
             {/* Success Message */}
-            {success && (
-                <div className="fixed top-6 right-6 px-6 py-4 bg-green-100/80 border-2 border-green-400 text-green-700 font-semibold rounded-xl z-50 shadow-lg animate-[slideInRight_0.5s_ease]">
-                    ✓ Message sent successfully!
-                </div>
-            )}
+            <AnimatePresence>
+                {success && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -50, x: 50 }}
+                        animate={{ opacity: 1, y: 0, x: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="fixed top-24 right-6 px-6 py-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-semibold rounded-xl z-50 shadow-xl backdrop-blur-md flex items-center gap-3"
+                    >
+                        <div className="bg-emerald-500 rounded-full p-1 text-white dark:text-slate-900">
+                            <Check size={16} strokeWidth={3} />
+                        </div>
+                        Message sent successfully! I'll get back to you soon.
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Error Message */}
+            <AnimatePresence>
+                {error && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -50, x: 50 }}
+                        animate={{ opacity: 1, y: 0, x: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="fixed top-24 right-6 px-6 py-4 bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 font-semibold rounded-xl z-50 shadow-xl backdrop-blur-md flex items-center gap-3 max-w-md"
+                    >
+                        <div className="bg-red-500 rounded-full p-1 text-white">
+                            <AlertCircle size={16} strokeWidth={3} />
+                        </div>
+                        <span className="text-sm">{error}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Section Header */}
-            <div className="text-center mb-20 animate-fadeInDown">
-                <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-indigo-400 to-purple-500 bg-clip-text text-transparent mb-4 animate-[titleGradient_5s_ease_infinite]">Let's Work Together</h1>
-                <p className="text-lg text-slate-400 max-w-xl mx-auto">Have a project in mind? Let's discuss how we can collaborate to bring your ideas to life.</p>
-            </div>
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-center mb-20"
+            >
+                <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 dark:from-white dark:via-indigo-400 dark:to-purple-500 bg-clip-text text-transparent mb-4">Let's Work Together</h1>
+                <p className="text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto">Have a project in mind? Let's discuss how we can collaborate to bring your ideas to life.</p>
+            </motion.div>
 
             {/* Contact Wrapper */}
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-10 animate-fadeInUp">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-10">
                 {/* Left Side - Contact Info */}
-                <div className="relative bg-slate-800/40 backdrop-blur-2xl rounded-3xl p-12 border border-white/10 overflow-hidden animate-float">
-                    <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] rounded-full bg-[radial-gradient(circle,rgba(102,126,234,0.1)_0%,transparent_70%)] animate-[rotate_20s_linear_infinite]" />
+                <motion.div
+                    initial={{ opacity: 0, x: -50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="relative bg-white/80 dark:bg-slate-800/40 backdrop-blur-2xl rounded-3xl p-12 border border-slate-200 dark:border-white/10 overflow-hidden shadow-lg dark:shadow-none"
+                >
+                    <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] rounded-full bg-[radial-gradient(circle,rgba(102,126,234,0.05)_0%,transparent_70%)] dark:bg-[radial-gradient(circle,rgba(102,126,234,0.1)_0%,transparent_70%)] animate-[spin_20s_linear_infinite]" />
                     <div className="relative z-10">
-                        <h2 className="text-3xl font-bold mb-8 text-white">Get in Touch</h2>
-                        <a href={`mailto:${contact.email}`} className="flex items-center gap-5 p-5 mb-5 bg-white/5 border border-white/10 rounded-2xl cursor-pointer transition-all duration-400 hover:bg-white/10 hover:border-indigo-300 hover:translate-x-2 relative overflow-hidden group info-item">
-                            <span className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-400/20 to-purple-500/20 border border-indigo-400/30 transition-all duration-400 group-hover:rotate-[360deg] group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-indigo-400/40 group-hover:to-purple-500/40 info-icon">
-                                <EmailIcon />
+                        <h2 className="text-3xl font-bold mb-8 text-slate-900 dark:text-white">Get in Touch</h2>
+
+                        <a href={`mailto:${contact.email}`} className="flex items-center gap-5 p-5 mb-5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl cursor-pointer transition-all duration-300 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-indigo-500/50 hover:translate-x-2 group">
+                            <span className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 border border-indigo-500/20 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                                <Mail size={24} />
                             </span>
                             <span className="flex-1">
-                                <span className="block text-xs text-slate-400 uppercase mb-1 tracking-wider info-label">Email</span>
-                                <span className="block text-base text-white font-medium info-value">{contact.email}</span>
+                                <span className="block text-xs text-slate-500 dark:text-slate-400 uppercase mb-1 tracking-wider">Email</span>
+                                <span className="block text-base text-slate-900 dark:text-white font-medium group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{contact.email}</span>
                             </span>
                         </a>
-                        <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 p-5 mb-5 bg-white/5 border border-white/10 rounded-2xl cursor-pointer transition-all duration-400 hover:bg-white/10 hover:border-indigo-300 hover:translate-x-2 relative overflow-hidden group info-item">
-                            <span className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-400/20 to-purple-500/20 border border-indigo-400/30 transition-all duration-400 group-hover:rotate-[360deg] group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-indigo-400/40 group-hover:to-purple-500/40 info-icon">
-                                <LinkedInIcon />
+
+                        <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 p-5 mb-5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl cursor-pointer transition-all duration-300 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-indigo-500/50 hover:translate-x-2 group">
+                            <span className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 border border-indigo-500/20 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                                <Linkedin size={24} />
                             </span>
                             <span className="flex-1">
-                                <span className="block text-xs text-slate-400 uppercase mb-1 tracking-wider info-label">LinkedIn</span>
-                                <span className="block text-base text-white font-medium info-value">Connect with me</span>
+                                <span className="block text-xs text-slate-500 dark:text-slate-400 uppercase mb-1 tracking-wider">LinkedIn</span>
+                                <span className="block text-base text-slate-900 dark:text-white font-medium group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Connect with me</span>
                             </span>
                         </a>
-                        <div className="flex items-center gap-5 p-5 mb-5 bg-white/5 border border-white/10 rounded-2xl transition-all duration-400 hover:bg-white/10 hover:border-indigo-300 hover:translate-x-2 relative overflow-hidden group info-item">
-                            <span className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-400/20 to-purple-500/20 border border-indigo-400/30 transition-all duration-400 group-hover:rotate-[360deg] group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-indigo-400/40 group-hover:to-purple-500/40 info-icon">
-                                <LocationIcon />
+
+                        <div className="flex items-center gap-5 p-5 mb-5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl transition-all duration-300 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-indigo-500/50 hover:translate-x-2 group">
+                            <span className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 border border-indigo-500/20 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                                <MapPin size={24} />
                             </span>
                             <span className="flex-1">
-                                <span className="block text-xs text-slate-400 uppercase mb-1 tracking-wider info-label">Location</span>
-                                <span className="block text-base text-white font-medium info-value">Hyderabad, India</span>
+                                <span className="block text-xs text-slate-500 dark:text-slate-400 uppercase mb-1 tracking-wider">Location</span>
+                                <span className="block text-base text-slate-900 dark:text-white font-medium group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Hyderabad, India</span>
                             </span>
                         </div>
-                        <div className="inline-flex items-center gap-2 mt-8 px-6 py-4 bg-green-100/10 border border-green-400/30 rounded-full text-green-500 text-sm font-medium animate-pulse availability-badge">
-                            <span className="w-2 h-2 bg-green-500 rounded-full animate-blink availability-dot" />
+
+                        <div className="inline-flex items-center gap-2 mt-8 px-6 py-4 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-600 dark:text-emerald-400 text-sm font-medium">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            </span>
                             Open to full-time & freelance opportunities
                         </div>
                     </div>
-                </div>
+                </motion.div>
+
                 {/* Right Side - Contact Form */}
-                <div className="relative bg-gradient-to-br from-indigo-400/10 to-purple-500/10 backdrop-blur-2xl rounded-3xl p-12 border border-white/10 overflow-hidden animate-float [animation-delay:2s]">
-                    <div className="absolute inset-0 rounded-3xl pointer-events-none opacity-30" style={{ background: 'linear-gradient(135deg, #667eea, #764ba2, #f093fb, #4facfe)', backgroundSize: '300% 300%', animation: 'gradientShift 8s ease infinite' }} />
-                    <div className="relative z-10">
-                        <form onSubmit={handleSubmit} autoComplete="off">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6 form-row">
-                                <div className="mb-0 form-group">
-                                    <label className="block text-sm font-semibold text-slate-200 mb-2 uppercase tracking-wide form-label" htmlFor="name">Name</label>
-                                    <input id="name" name="name" className="form-input w-full px-5 py-4 rounded-xl border-2 border-white/10 bg-slate-900/60 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all" placeholder="Your name" value={name} onChange={e => setName(e.target.value)} required />
-                                </div>
-                                <div className="mb-0 form-group">
-                                    <label className="block text-sm font-semibold text-slate-200 mb-2 uppercase tracking-wide form-label" htmlFor="email">Email</label>
-                                    <input id="email" name="email" type="email" className="form-input w-full px-5 py-4 rounded-xl border-2 border-white/10 bg-slate-900/60 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all" placeholder="your@email.com" value={email} onChange={e => setEmail(e.target.value)} required />
-                                </div>
+                <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="relative bg-white/80 dark:bg-slate-900/50 backdrop-blur-2xl rounded-3xl p-8 md:p-12 border border-slate-200 dark:border-white/10 overflow-hidden shadow-lg dark:shadow-none"
+                >
+                    <form onSubmit={handleSubmit} autoComplete="off">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                            <div className="mb-0">
+                                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wide" htmlFor="name">Name</label>
+                                <input
+                                    id="name"
+                                    name="name"
+                                    className="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none form-input-focus"
+                                    placeholder="Your name"
+                                    value={name}
+                                    onChange={e => setName(e.target.value)}
+                                    required
+                                    aria-required="true"
+                                />
                             </div>
-                            <div className="mb-6 form-group">
-                                <label className="block text-sm font-semibold text-slate-200 mb-2 uppercase tracking-wide form-label" htmlFor="subject">Subject</label>
-                                <input id="subject" name="subject" className="form-input w-full px-5 py-4 rounded-xl border-2 border-white/10 bg-slate-900/60 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all" placeholder="What's this about?" value={subject} onChange={e => setSubject(e.target.value)} required />
+                            <div className="mb-0">
+                                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wide" htmlFor="email">Email</label>
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    className="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none form-input-focus"
+                                    placeholder="your@email.com"
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                    required
+                                    aria-required="true"
+                                />
                             </div>
-                            <div className="mb-6 form-group">
-                                <label className="block text-sm font-semibold text-slate-200 mb-2 uppercase tracking-wide form-label" htmlFor="message">Message</label>
-                                <textarea id="message" name="message" className="form-textarea w-full px-5 py-4 rounded-xl border-2 border-white/10 bg-slate-900/60 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all min-h-[180px] resize-vertical" placeholder="Tell me about your project..." maxLength={maxLength} required value={message} onChange={e => setMessage(e.target.value)} />
-                                <div className="text-right text-xs text-slate-400 mt-2 char-counter">{message.length} / {maxLength}</div>
+                        </div>
+
+                        {/* Honeypot field (hidden from humans) */}
+                        <div className="hidden" aria-hidden="true">
+                            <label htmlFor="full_name_hp">Bot Check - Do Not Fill</label>
+                            <input
+                                id="full_name_hp"
+                                type="text"
+                                name="full_name_hp"
+                                tabIndex={-1}
+                                value={honeypot}
+                                onChange={e => setHoneypot(e.target.value)}
+                                autoComplete="off"
+                            />
+                        </div>
+
+                        <div className="mb-6">
+                            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wide" htmlFor="subject">Subject</label>
+                            <input
+                                id="subject"
+                                name="subject"
+                                className="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none form-input-focus"
+                                placeholder="What's this about?"
+                                value={subject}
+                                onChange={e => setSubject(e.target.value)}
+                                required
+                                aria-required="true"
+                            />
+                        </div>
+                        <div className="mb-6">
+                            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wide" htmlFor="message">Message</label>
+                            <textarea
+                                id="message"
+                                name="message"
+                                className="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none form-input-focus min-h-[180px] resize-none"
+                                placeholder="Tell me about your project..."
+                                maxLength={maxLength}
+                                required
+                                aria-required="true"
+                                value={message}
+                                onChange={e => setMessage(e.target.value)}
+                            />
+                            <div className="text-right text-xs text-slate-500 mt-2" aria-live="polite">
+                                {message.length} / {maxLength} characters
                             </div>
-                            <div className="flex flex-wrap items-center justify-between gap-5 mt-8 form-footer">
-                                <button type="submit" className={`submit-button relative px-10 py-4 text-base font-semibold text-white rounded-xl bg-gradient-to-r from-indigo-400 to-purple-500 border-none shadow-lg transition-all duration-400 overflow-hidden flex items-center gap-2 ${loading ? 'opacity-70 pointer-events-none' : ''}`}>
-                                    <span className="flex items-center gap-2 relative z-10">{loading ? 'Sending...' : 'Send Message'} <SendIcon /></span>
-                                    {/* Button ripple effect */}
-                                    <span className="absolute top-1/2 left-1/2 w-0 h-0 rounded-full bg-white/20 -translate-x-1/2 -translate-y-1/2 transition-all duration-700 group-hover:w-[300px] group-hover:h-[300px]" />
-                                    {loading && <span className="absolute w-4 h-4 top-1/2 left-1/2 -ml-2 -mt-2 border-2 border-white border-t-transparent rounded-full animate-spin" />}
-                                </button>
-                                <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="linkedin-link flex items-center gap-2 text-slate-400 hover:text-white px-5 py-3 rounded-lg bg-white/5 border border-white/10 transition-all duration-300 hover:bg-white/10 hover:border-indigo-300 hover:-translate-y-1">
-                                    <LinkedInIcon /> Or message me on LinkedIn
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-between gap-5 mt-8">
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className={`relative px-10 py-4 text-base font-semibold text-white rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 border-none shadow-lg shadow-indigo-500/25 transition-all duration-300 hover:shadow-indigo-500/40 hover:-translate-y-1 flex items-center gap-2 overflow-hidden focus-ring ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                            >
+                                <span className="relative z-10 flex items-center gap-2">
+                                    {loading ? 'Sending Message...' : 'Send Message'}
+                                    {!loading && <Send size={18} />}
+                                </span>
+                            </button>
+                            <a
+                                href={contact.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white px-5 py-3 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 transition-all duration-300 hover:bg-slate-200 dark:hover:bg-white/10 hover:border-indigo-500/30 focus-ring"
+                            >
+                                <Linkedin size={18} /> Message on LinkedIn
+                            </a>
+                        </div>
+                    </form>
+                </motion.div>
             </div>
         </section>
     )

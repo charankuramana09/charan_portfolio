@@ -73,8 +73,8 @@ export function StarfieldBackground({
 
     const animate = () => {
       tick++;
-      ctx.fillStyle = "rgba(10, 10, 15, 0.2)";
-      ctx.fillRect(0, 0, width, height);
+      ctx.clearRect(0, 0, width, height); // Clear instead of fill
+
       const cx = width / 2;
       const cy = height / 2;
       for (const star of stars) {
@@ -117,8 +117,6 @@ export function StarfieldBackground({
       animationId = requestAnimationFrame(animate);
     };
 
-    ctx.fillStyle = "#0a0a0f";
-    ctx.fillRect(0, 0, width, height);
     animationId = requestAnimationFrame(animate);
     return () => {
       cancelAnimationFrame(animationId);
@@ -129,19 +127,19 @@ export function StarfieldBackground({
   return (
     <div
       ref={containerRef}
-      className={cn("relative w-full overflow-hidden bg-[#0a0a0f]", className)}
+      className={cn("relative w-full overflow-hidden bg-white dark:bg-[#0a0a0f]", className)}
       style={{ minHeight: '100%', minWidth: '100%' }}
     >
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full dark:opacity-100 opacity-0 transition-opacity duration-300" />
       <div
-        className="pointer-events-none absolute inset-0 opacity-30"
+        className="pointer-events-none absolute inset-0 opacity-30 dark:block hidden"
         style={{
           background:
             "radial-gradient(ellipse at 30% 40%, rgba(56, 100, 180, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 60%, rgba(100, 60, 150, 0.1) 0%, transparent 50%)",
         }}
       />
       <div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 dark:block hidden"
         style={{
           background:
             "radial-gradient(ellipse at center, transparent 0%, transparent 40%, rgba(5,5,10,0.9) 100%)",

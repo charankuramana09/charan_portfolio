@@ -4,6 +4,7 @@ import { hero } from '../data/portfolio'
 import { sectionVariant, item, hover, maskReveal, svgDraw, blurFocus, parallaxVariant, staggerForLength, morphShape } from '../motion/variants'
 import BackgroundGradient from './ui/background-gradient'
 import { StarfieldBackground } from './StarfieldBackground';
+import charanAvatar from '../assets/charan.png';
 
 export default function Hero() {
     const { scrollY } = useScroll()
@@ -148,7 +149,7 @@ export default function Hero() {
                                 style={{ rotateX: cardStyle.rotateX, rotateY: cardStyle.rotateY, transformStyle: 'preserve-3d', perspective: 1000, transition: 'box-shadow 220ms ease, transform 220ms ease' }}
                             >
                                 <img
-                                    src="/src/assets/charan.png"
+                                    src={charanAvatar}
                                     alt="Fullstack Java"
                                     className="w-full h-full object-cover rounded-full ring-8 ring-white/70 dark:ring-slate-800/70"
                                     style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 0 28px 8px rgba(255,255,255,0.6)', transition: 'box-shadow 220ms ease, transform 220ms ease' }}

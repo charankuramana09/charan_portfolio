@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { contact } from '../data/portfolio'
 
 
 function IconGitHub() {
@@ -40,7 +41,7 @@ function IconMail() {
 export default function Footer() {
     const year = new Date().getFullYear();
     return (
-        <footer className="relative z-10 bg-slate-900/60 backdrop-blur-xl border-t border-white/10 overflow-hidden mt-20">
+        <footer className="relative z-10 bg-slate-50 dark:bg-slate-900/60 backdrop-blur-xl border-t border-slate-200 dark:border-white/10 overflow-hidden mt-20 transition-colors duration-300">
             {/* Animated gradient line at top */}
             <div className="absolute top-0 left-0 w-full h-0.5">
                 <motion.div
@@ -52,8 +53,8 @@ export default function Footer() {
             </div>
 
             {/* Background Decorations */}
-            <div className="pointer-events-none absolute -top-40 left-[10%] w-[400px] h-[400px] rounded-full bg-indigo-400 opacity-10 blur-3xl animate-[floatSlow_20s_ease-in-out_infinite]" />
-            <div className="pointer-events-none absolute -bottom-36 right-[10%] w-[350px] h-[350px] rounded-full bg-purple-500 opacity-10 blur-3xl animate-[floatSlow_25s_ease-in-out_5s_infinite]" />
+            <div className="pointer-events-none absolute -top-40 left-[10%] w-[400px] h-[400px] rounded-full bg-indigo-400/20 dark:bg-indigo-400 opacity-20 dark:opacity-10 blur-3xl animate-[floatSlow_20s_ease-in-out_infinite]" />
+            <div className="pointer-events-none absolute -bottom-36 right-[10%] w-[350px] h-[350px] rounded-full bg-purple-500/20 dark:bg-purple-500 opacity-20 dark:opacity-10 blur-3xl animate-[floatSlow_25s_ease-in-out_5s_infinite]" />
 
             <div className="relative z-10 max-w-[1400px] mx-auto px-6 py-20 sm:py-16">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 md:gap-10 mb-12 footer-content">
@@ -65,21 +66,21 @@ export default function Footer() {
                         viewport={{ once: true }}
                         transition={{ duration: 1 }}
                     >
-                        <div className="footer-logo text-3xl font-bold bg-gradient-to-tr from-white to-indigo-400 bg-clip-text text-transparent mb-4 inline-block animate-[float_4s_ease-in-out_infinite]">
+                        <div className="footer-logo text-3xl font-bold bg-gradient-to-tr from-indigo-600 to-purple-600 dark:from-white dark:to-indigo-400 bg-clip-text text-transparent mb-4 inline-block animate-[float_4s_ease-in-out_infinite]">
                             Charan Kuramana
                         </div>
-                        <p className="footer-description text-slate-400 leading-relaxed mb-6 text-[15px]">
+                        <p className="footer-description text-slate-600 dark:text-slate-400 leading-relaxed mb-6 text-[15px]">
                             Product-focused Full-Stack Engineer crafting performant web experiences with modern technologies and best practices.
                         </p>
                         <a
-                            href="mailto:charankuramana143@gmail.com"
-                            className="footer-email inline-flex items-center gap-2 text-indigo-400 text-[15px] px-5 py-3 bg-indigo-400/10 border border-indigo-400/20 rounded-xl transition-all duration-300 relative overflow-hidden hover:bg-indigo-400/20 hover:border-indigo-400/40 hover:text-white"
+                            href={`mailto:${contact.email}`}
+                            className="footer-email inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-[15px] px-5 py-3 bg-indigo-50 dark:bg-indigo-400/10 border border-indigo-100 dark:border-indigo-400/20 rounded-xl transition-all duration-300 relative overflow-hidden hover:bg-indigo-100 dark:hover:bg-indigo-400/20 hover:border-indigo-200 dark:hover:border-indigo-400/40 hover:text-indigo-700 dark:hover:text-white"
                             onClick={() => {
                                 // Analytics event could go here
                             }}
                         >
                             <IconMail />
-                            <span>charankuramana143@gmail.com</span>
+                            <span>{contact.email}</span>
                         </a>
                     </motion.div>
 
@@ -91,7 +92,7 @@ export default function Footer() {
                         viewport={{ once: true }}
                         transition={{ duration: 1, delay: 0.2 }}
                     >
-                        <h3 className="footer-section-title text-base font-bold uppercase tracking-wider mb-6 text-slate-200 relative inline-block">
+                        <h3 className="footer-section-title text-base font-bold uppercase tracking-wider mb-6 text-slate-800 dark:text-slate-200 relative inline-block">
                             Quick Links
                             <span className="absolute -bottom-2 left-0 w-10 h-1 rounded bg-gradient-to-r from-indigo-400 to-purple-500 animate-pulse" />
                         </h3>
@@ -105,7 +106,7 @@ export default function Footer() {
                                 <li key={item.href} className="mb-3">
                                     <a
                                         href={item.href}
-                                        className="relative inline-flex items-center gap-2 text-slate-400 text-[15px] transition-all duration-300 hover:text-white pl-0 group"
+                                        className="relative inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 text-[15px] transition-all duration-300 hover:text-indigo-600 dark:hover:text-white pl-0 group"
                                     >
                                         <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-indigo-400 to-purple-500 transition-all duration-300 group-hover:w-full" />
                                         <svg className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polyline points="9 18 15 12 9 6" /></svg>
@@ -124,25 +125,27 @@ export default function Footer() {
                         viewport={{ once: true }}
                         transition={{ duration: 1, delay: 0.4 }}
                     >
-                        <h3 className="footer-section-title text-base font-bold uppercase tracking-wider mb-6 text-slate-200 relative inline-block">
+                        <h3 className="footer-section-title text-base font-bold uppercase tracking-wider mb-6 text-slate-800 dark:text-slate-200 relative inline-block">
                             Connect
                             <span className="absolute -bottom-2 left-0 w-10 h-1 rounded bg-gradient-to-r from-indigo-400 to-purple-500 animate-pulse" />
                         </h3>
                         <div className="social-links flex gap-3 mb-6">
                             <motion.a
                                 whileHover={{ y: -8, rotate: 5 }}
-                                href="https://github.com"
-                                className="social-link w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-xl text-slate-400 transition-all duration-400 relative overflow-hidden"
+                                href="https://github.com/charankuramana09"
+                                className="social-link w-12 h-12 flex items-center justify-center bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-600 dark:text-slate-400 transition-all duration-400 relative overflow-hidden hover:bg-slate-100 dark:hover:bg-white/10 hover:text-indigo-600 dark:hover:text-white"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 aria-label="GitHub"
                             >
                                 <IconGitHub />
                             </motion.a>
                             <motion.a
                                 whileHover={{ y: -8, rotate: -5 }}
-                                href="https://linkedin.com"
-                                className="social-link w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-xl text-slate-400 transition-all duration-400 relative overflow-hidden"
+                                href="https://www.linkedin.com/in/charan-kuramana-6b8a20203/"
+                                className="social-link w-12 h-12 flex items-center justify-center bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-600 dark:text-slate-400 transition-all duration-400 relative overflow-hidden hover:bg-slate-100 dark:hover:bg-white/10 hover:text-indigo-600 dark:hover:text-white"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 aria-label="LinkedIn"
                             >
                                 <IconLinkedIn />
@@ -150,7 +153,7 @@ export default function Footer() {
                         </div>
                         <motion.button
                             whileHover={{ y: -3, scale: 1.05 }}
-                            className="back-to-top inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-400 text-[14px] transition-all duration-300 cursor-pointer hover:bg-white/10 hover:border-indigo-400/30 hover:text-white"
+                            className="back-to-top inline-flex items-center gap-2 px-6 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-600 dark:text-slate-400 text-[14px] transition-all duration-300 cursor-pointer hover:bg-slate-100 dark:hover:bg-white/10 hover:border-indigo-400/30 hover:text-indigo-600 dark:hover:text-white"
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                             aria-label="Back to top"
                         >
@@ -162,19 +165,19 @@ export default function Footer() {
 
                 {/* Footer Bottom */}
                 <motion.div
-                    className="footer-bottom pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-5 text-slate-500 text-[14px]"
+                    className="footer-bottom pt-10 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-5 text-slate-500 dark:text-slate-500 text-[14px]"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.6 }}
                 >
                     <p className="footer-copyright">
-                        © {year} Charan Kuramana — Built with <span className="footer-tech text-indigo-400 font-semibold">React, Vite &amp; Tailwind</span>
+                        © {year} Charan Kuramana — Built with <span className="footer-tech text-indigo-500 dark:text-indigo-400 font-semibold">React, Vite &amp; Tailwind</span>
                     </p>
-                    <div className="footer-secondary-links flex gap-6">
-                        <a href="#privacy" className="relative text-slate-500 hover:text-white transition-all duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-px after:bg-indigo-400 after:transition-all after:duration-300 hover:after:w-full">Privacy</a>
-                        <a href="#terms" className="relative text-slate-500 hover:text-white transition-all duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-px after:bg-indigo-400 after:transition-all after:duration-300 hover:after:w-full">Terms</a>
-                    </div>
+                    <nav className="footer-secondary-links flex gap-6" aria-label="Footer Legal Links">
+                        <a href="#privacy" className="relative text-slate-500 hover:text-indigo-600 dark:hover:text-white transition-all duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-px after:bg-indigo-400 after:transition-all after:duration-300 hover:after:w-full">Privacy</a>
+                        <a href="#terms" className="relative text-slate-500 hover:text-indigo-600 dark:hover:text-white transition-all duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-px after:bg-indigo-400 after:transition-all after:duration-300 hover:after:w-full">Terms</a>
+                    </nav>
                 </motion.div>
             </div>
         </footer>

@@ -18,7 +18,7 @@ const AnimatedSkillCard: React.FC<AnimatedSkillCardProps> = ({ category }) => {
     return (
         <div className="rounded-2xl shadow-lg bg-slate-800/70 p-6 flex flex-col items-center mb-6 animate-fadeInUp">
             <div className="mb-4 text-xl font-bold text-white tracking-wide uppercase">
-                <span>{category.title}</span>
+                <span>{category.name}</span>
             </div>
             <div className="flex flex-wrap gap-2 justify-center">
                 <span

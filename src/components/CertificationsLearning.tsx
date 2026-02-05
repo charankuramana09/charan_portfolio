@@ -1,463 +1,196 @@
-import React, { useState, useEffect } from 'react';
-import { Award, Calendar, MapPin, BookOpen, ExternalLink, Check, Sparkles, TrendingUp, Code, Server, Coffee } from 'lucide-react';
+import React from 'react';
+import { Award, Calendar, BookOpen, ExternalLink, TrendingUp, Code, Server, Coffee, Trophy, Star } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+import { Ripple } from './ui/Ripple';
 
 const CertificationsLearning = () => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
+    const certifications = [
+        {
+            id: 1,
+            title: 'Project Management Skills Upgrade',
+            provider: 'Udemy',
+            year: '2026',
+            timeline: 'Continuous',
+            icon: TrendingUp,
+            gradient: 'from-emerald-500 to-teal-600',
+            bgGlow: 'bg-emerald-500/10',
+            skills: ['Agile & Scrum', 'Project Lifecycle', 'Risk Management', 'Stakeholder Comm.'],
+            description: 'Mastering the art of delivering value through structured yet flexible project management methodologies.'
+        },
+        {
+            id: 2,
+            title: 'Microservices Architecture',
+            provider: 'Udemy',
+            year: '2025',
+            timeline: 'Ongoing',
+            icon: Server,
+            gradient: 'from-cyan-500 to-blue-600',
+            bgGlow: 'bg-cyan-500/10',
+            skills: ['Service Discovery', 'API Gateway', 'Event-Driven', 'Scalability'],
+            description: 'Designing resilient distributed systems to handle high-scale enterprise requirements.'
+        },
+        {
+            id: 3,
+            title: 'Full Stack Java Developer',
+            provider: 'Sathya Technologies',
+            year: '2023',
+            timeline: '6 Months',
+            icon: Coffee,
+            gradient: 'from-orange-500 to-red-600',
+            bgGlow: 'bg-orange-500/10',
+            skills: ['Java', 'Spring Boot', 'React', 'MySQL', 'Hibernate'],
+            description: 'Intensive bootcamp covering the complete software development lifecycle with hands-on projects.'
+        }
+    ];
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY;
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (scrolled / maxScroll) * 100;
-      setScrollProgress(progress);
-    };
+    return (
+        <section id="certifications" className="py-24 bg-slate-50 dark:bg-slate-950 px-4 relative overflow-hidden transition-colors duration-300">
+            {/* Background Ripple */}
+            <Ripple mainCircleSize={300} mainCircleOpacity={0.2} numCircles={8} className="text-indigo-200 dark:text-indigo-900/30" />
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+            <div className="max-w-7xl mx-auto relative z-10">
+                {/* Section Header */}
+                <div className="text-center mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/50 mb-6 backdrop-blur-md"
+                    >
+                        <Trophy size={16} className="text-yellow-600 dark:text-yellow-500" />
+                        <span className="text-sm font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Achievements</span>
+                    </motion.div>
 
-  const certifications = [
-    {
-      id: 1,
-      title: 'Project Management Skills Upgrade',
-      provider: 'Udemy',
-      year: '2026',
-      duration: 'Continuous Learning Journey',
-      icon: TrendingUp,
-      color: 'emerald',
-      skills: [
-        'Fundamentals of Project Management',
-        'Project Lifecycle: Initiation, Planning, Execution, Monitoring & Control, Closure',
-        'Agile & Scrum, Waterfall, AI in Project Management',
-        'MS Excel for Project Planning & Tracking'
-      ],
-      description: 'Strengthened my ability to plan, track, communicate, and adapt between Agile and Waterfall, leveraging AI tools for better decision-making.',
-      badge: '/api/placeholder/100/100'
-    },
-    {
-      id: 2,
-      title: 'Microservices Architecture',
-      provider: 'Udemy',
-      year: '2025',
-      duration: 'iSign Tech | Continuous Upskilling',
-      icon: Server,
-      color: 'cyan',
-      skills: [
-        'Microservices architecture, service discovery, API gateways',
-        'Building scalable, robust systems'
-      ],
-      description: 'Applied new skills to real projects, contributing to robust, scalable applications at iSign Tech.',
-      badge: '/api/placeholder/100/100'
-    },
-    {
-      id: 3,
-      title: 'Full Stack Java Developer Training',
-      provider: 'Sathya Technologies, Hyderabad',
-      year: '2022 - 2023',
-      duration: 'Aug 2022 – Feb 2023',
-      icon: Coffee,
-      color: 'orange',
-      skills: [
-        'Java, Spring Boot, HTML, CSS, JavaScript',
-        'Developed a full-fledged Banking Application:'
-      ],
-      features: [
-        'User Registration & Login',
-        'Deposit & Withdrawal',
-        'Funds Transfer',
-        'Account Closure'
-      ],
-      description: 'Hands-on experience building responsive UIs and robust backends, ready to contribute to real-world projects.',
-      badge: '/api/placeholder/100/100'
-    }
-  ];
+                    <motion.h2
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white mb-6 tracking-tight"
+                    >
+                        Certifications & <span className="bg-gradient-to-r from-indigo-500 to-cyan-500 dark:from-indigo-400 dark:to-cyan-400 bg-clip-text text-transparent">Learning</span>
+                    </motion.h2>
 
-  const getColorClasses = (color: string) => {
-    const colors: Record<string, any> = {
-      emerald: {
-        border: 'border-emerald-500',
-        bg: 'bg-emerald-500',
-        text: 'text-emerald-400',
-        glow: 'shadow-emerald-500/50',
-        gradient: 'from-emerald-500 to-teal-500'
-      },
-      cyan: {
-        border: 'border-cyan-500',
-        bg: 'bg-cyan-500',
-        text: 'text-cyan-400',
-        glow: 'shadow-cyan-500/50',
-        gradient: 'from-cyan-500 to-blue-500'
-      },
-      orange: {
-        border: 'border-orange-500',
-        bg: 'bg-orange-500',
-        text: 'text-orange-400',
-        glow: 'shadow-orange-500/50',
-        gradient: 'from-orange-500 to-amber-500'
-      }
-    };
-    return colors[color];
-  };
-
-  return (
-    <div className="min-h-screen bg-slate-950 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Sophisticated Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Diagonal gradient strips */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent animate-slide-right"></div>
-          <div className="absolute top-1/3 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent animate-slide-left"></div>
-          <div className="absolute top-2/3 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent animate-slide-right-delayed"></div>
-        </div>
-
-        {/* Radial gradients */}
-        <div className="absolute top-1/4 -left-48 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-1/4 -right-48 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-slow-delayed"></div>
-        
-        {/* Dot pattern */}
-        <div className="absolute inset-0 bg-dot-pattern opacity-5"></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Elegant Header */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-3 mb-6 px-6 py-3 rounded-full bg-slate-900/60 backdrop-blur-xl border border-slate-800 shadow-2xl">
-            <Award className="w-5 h-5 text-emerald-400 animate-bounce-subtle" />
-            <span className="text-sm font-bold tracking-[0.2em] text-slate-300 uppercase">
-              Professional Growth
-            </span>
-            <Sparkles className="w-5 h-5 text-cyan-400 animate-spin-slow" />
-          </div>
-
-          <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black mb-6 tracking-tight">
-            <span className="inline-block bg-gradient-to-r from-emerald-400 via-cyan-400 to-orange-400 bg-clip-text text-transparent animate-gradient-flow">
-              Certifications
-            </span>
-            <br />
-            <span className="text-slate-200">& Learning</span>
-          </h1>
-
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
-            A journey of continuous growth, skill development, and professional excellence
-          </p>
-
-          {/* Progress indicator */}
-          <div className="mt-8 max-w-md mx-auto h-1 bg-slate-800 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-orange-500 transition-all duration-300"
-              style={{ width: `${scrollProgress}%` }}
-            ></div>
-          </div>
-        </div>
-
-        {/* Timeline Layout */}
-        <div className="relative">
-          {/* Central timeline line */}
-          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-emerald-500 via-cyan-500 to-orange-500 transform -translate-x-1/2 opacity-30"></div>
-
-          {/* Certifications */}
-          <div className="space-y-24">
-            {certifications.map((cert, index) => {
-              const isEven = index % 2 === 0;
-              const colors = getColorClasses(cert.color);
-              const IconComponent = cert.icon;
-              const isActive = activeIndex === index;
-
-              return (
-                <div
-                  key={cert.id}
-                  className={`relative flex flex-col lg:flex-row items-center gap-8 ${
-                    isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'
-                  }`}
-                  onMouseEnter={() => setActiveIndex(index)}
-                  onMouseLeave={() => setActiveIndex(null)}
-                  style={{
-                    animation: `fadeInUp 0.8s ease-out ${index * 0.2}s both`
-                  }}
-                >
-                  {/* Timeline dot */}
-                  <div className="hidden lg:block absolute left-1/2 top-12 transform -translate-x-1/2 z-20">
-                    <div className={`relative w-6 h-6 rounded-full ${colors.bg} ${isActive ? 'animate-ping-slow' : ''}`}></div>
-                    <div className={`absolute inset-0 w-6 h-6 rounded-full ${colors.bg} shadow-lg ${colors.glow}`}></div>
-                  </div>
-
-                  {/* Content */}
-                  <div className={`w-full lg:w-[calc(50%-3rem)] ${isEven ? 'lg:text-right' : 'lg:text-left'}`}>
-                    {/* Main card */}
-                    <div className="group relative">
-                      {/* Glow effect */}
-                      <div className={`absolute -inset-0.5 bg-gradient-to-r ${colors.gradient} rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500`}></div>
-
-                      {/* Card content */}
-                      <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-2xl p-8 border border-slate-800 group-hover:border-slate-700 transition-all duration-500 shadow-2xl">
-                        {/* Badge & Icon */}
-                        <div className={`flex items-center gap-4 mb-6 ${isEven ? 'lg:justify-end' : 'lg:justify-start'} justify-start`}>
-                          <div className={`relative p-4 rounded-xl bg-gradient-to-br ${colors.gradient} shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
-                            <IconComponent className="w-8 h-8 text-white" />
-                            <div className={`absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse-gentle`}></div>
-                          </div>
-
-                          <div className={`flex-shrink-0 ${isEven ? 'lg:order-first' : ''}`}> 
-                            <div className={`w-20 h-20 rounded-full border-2 ${colors.border} flex items-center justify-center bg-slate-800/50 backdrop-blur`}>
-                              <Award className={`w-10 h-10 ${colors.text}`} />
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Title */}
-                        <h3 className={`text-3xl font-bold text-white mb-2 group-hover:${colors.text} transition-colors duration-300`}>
-                          {cert.title}
-                        </h3>
-
-                        {/* Meta info */}
-                        <div className={`flex flex-wrap gap-4 mb-4 ${isEven ? 'lg:justify-end' : 'lg:justify-start'} justify-start text-sm text-slate-400`}>
-                          <div className="flex items-center gap-2">
-                            <BookOpen className="w-4 h-4" />
-                            <span>{cert.provider}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
-                            <span>{cert.year}</span>
-                          </div>
-                        </div>
-
-                        {/* Duration badge */}
-                        <div className={`inline-block px-4 py-2 rounded-full ${colors.bg}/10 border ${colors.border}/30 mb-6`}>
-                          <span className={`text-sm font-semibold ${colors.text}`}>{cert.duration}</span>
-                        </div>
-
-                        {/* Description */}
-                        <p className="text-slate-300 mb-6 leading-relaxed">
-                          {cert.description}
-                        </p>
-
-                        {/* Skills */}
-                        <div className="space-y-3 mb-6">
-                          {cert.skills.map((skill, idx) => (
-                            <div 
-                              key={idx}
-                              className="flex items-start gap-3 group/item"
-                              style={{
-                                animation: isActive ? `slideInRight 0.4s ease-out ${idx * 0.1}s both` : 'none'
-                              }}
-                            >
-                              <div className={`mt-1 p-1 rounded-full ${colors.bg}/20`}>
-                                <Check className={`w-4 h-4 ${colors.text}`} />
-                              </div>
-                              <span className="text-slate-300 group-hover/item:text-white transition-colors">
-                                {skill}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Features (if available) */}
-                        {cert.features && (
-                          <div className="mt-6 pt-6 border-t border-slate-800">
-                            <h4 className="text-sm font-semibold text-slate-400 mb-3 uppercase tracking-wider">
-                              Key Features Developed
-                            </h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                              {cert.features.map((feature: string, idx: number) => (
-                                <div 
-                                  key={idx}
-                                  className={`flex items-center gap-2 p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors ${isEven ? 'lg:justify-end' : ''}`}
-                                  style={{
-                                    animation: isActive ? `fadeIn 0.4s ease-out ${(cert.skills.length + idx) * 0.1}s both` : 'none'
-                                  }}
-                                >
-                                  <Code className={`w-4 h-4 ${colors.text} flex-shrink-0`} />
-                                  <span className="text-sm text-slate-300">{feature}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Action button */}
-                        <div className={`mt-6 flex ${isEven ? 'lg:justify-end' : 'lg:justify-start'} justify-start`}>
-                          <button className={`group/btn flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r ${colors.gradient} text-white font-semibold hover:shadow-lg ${colors.glow} transition-all duration-300 transform hover:scale-105`}>
-                            <span>View Certificate</span>
-                            <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
-                          </button>
-                        </div>
-
-                        {/* Decorative corner */}
-                        <div className={`absolute top-0 ${isEven ? 'right-0' : 'left-0'} w-24 h-24 ${colors.bg}/5 ${isEven ? 'rounded-tr-2xl' : 'rounded-tl-2xl'} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Spacer for opposite side */}
-                  <div className="hidden lg:block w-[calc(50%-3rem)]"></div>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto"
+                    >
+                        Validating expertise through rigorous training and continuous professional development.
+                    </motion.p>
                 </div>
-              );
-            })}
-          </div>
-        </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-32 text-center">
-          <div className="inline-block p-1 rounded-2xl bg-gradient-to-r from-emerald-500 via-cyan-500 to-orange-500 animate-gradient-xy">
-            <div className="bg-slate-950 rounded-xl px-8 py-6">
-              <p className="text-slate-300 mb-4">Want to see more of my learning journey?</p>
-              <button className="px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white font-bold hover:shadow-2xl hover:shadow-emerald-500/50 transition-all duration-300 transform hover:scale-105">
-                View All Certifications
-              </button>
+                {/* Grid Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {certifications.map((cert, index) => {
+                        const Icon = cert.icon;
+                        return (
+                            <motion.div
+                                key={cert.id}
+                                initial={{ opacity: 0, y: 50 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1, duration: 0.5 }}
+                                whileHover={{ y: -10 }}
+                                className={`group relative bg-white/90 dark:bg-slate-900/50 backdrop-blur-xl rounded-3xl p-1 border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 transition-all duration-300 h-full shadow-lg dark:shadow-none`}
+                            >
+                                {/* Hover Glow */}
+                                <div className={`absolute inset-0 bg-gradient-to-br ${cert.gradient} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-500 blur-xl`}></div>
+
+                                <div className="relative h-full bg-white/95 dark:bg-slate-900/80 rounded-[22px] p-8 flex flex-col overflow-hidden">
+                                    {/* Top Decor */}
+                                    <div className={`absolute -right-10 -top-10 w-40 h-40 ${cert.bgGlow} rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 ease-out opacity-50 dark:opacity-100`}></div>
+
+                                    {/* Header */}
+                                    <div className="flex justify-between items-start mb-6">
+                                        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${cert.gradient} flex items-center justify-center text-white shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                                            <Icon size={28} />
+                                        </div>
+                                        <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                                            {cert.year}
+                                        </span>
+                                    </div>
+
+                                    {/* Title & Provider */}
+                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-cyan-600 dark:group-hover:from-white dark:group-hover:to-slate-400 transition-all">
+                                        {cert.title}
+                                    </h3>
+                                    <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-4 font-medium">
+                                        <BookOpen size={14} />
+                                        {cert.provider}
+                                    </div>
+
+                                    {/* Description */}
+                                    <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-grow border-l-2 border-slate-200 dark:border-white/5 pl-4 group-hover:border-indigo-400 dark:group-hover:border-white/20 transition-colors">
+                                        {cert.description}
+                                    </p>
+
+                                    {/* Skills Tags */}
+                                    <div className="flex flex-wrap gap-2 mt-auto">
+                                        {cert.skills.slice(0, 3).map((skill, i) => (
+                                            <span key={i} className="px-3 py-1 bg-slate-100 dark:bg-white/5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/5 group-hover:border-indigo-200 dark:group-hover:border-white/20 transition-colors">
+                                                {skill}
+                                            </span>
+                                        ))}
+                                        {cert.skills.length > 3 && (
+                                            <span className="px-3 py-1 bg-slate-100 dark:bg-white/5 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400">
+                                                +{cert.skills.length - 3}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {/* Action Area (Hidden but ready for interactions) */}
+                                    <div className="mt-6 pt-6 border-t border-slate-200 dark:border-white/5 flex items-center justify-between opacity-60 group-hover:opacity-100 transition-opacity">
+                                        <span className="text-xs text-slate-500 font-mono">VERIFIED</span>
+                                        <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 transition-colors">
+                                            <ExternalLink size={16} className="text-slate-400 dark:text-slate-300" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+
+                {/* Bottom CTA */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mt-16 text-center"
+                >
+                    <button className="group relative px-8 py-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-full font-medium hover:text-indigo-600 dark:hover:text-white hover:border-indigo-500/50 transition-all duration-300 overflow-hidden">
+                        <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <span className="relative flex items-center gap-2">
+                            View All Certifications <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        </span>
+                    </button>
+                </motion.div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <style>{`
-        /* Dot pattern */
-        .bg-dot-pattern {
-          background-image: radial-gradient(circle, rgba(148, 163, 184, 0.15) 1px, transparent 1px);
-          background-size: 24px 24px;
-        }
-
-        /* Sliding animations */
-        @keyframes slide-right {
-          0% { transform: translateX(-100%); opacity: 0; }
-          50% { opacity: 1; }
-          100% { transform: translateX(100%); opacity: 0; }
-        }
-
-        @keyframes slide-left {
-          0% { transform: translateX(100%); opacity: 0; }
-          50% { opacity: 1; }
-          100% { transform: translateX(-100%); opacity: 0; }
-        }
-
-        .animate-slide-right {
-          animation: slide-right 8s linear infinite;
-        }
-
-        .animate-slide-left {
-          animation: slide-left 10s linear infinite;
-        }
-
-        .animate-slide-right-delayed {
-          animation: slide-right 12s linear infinite 2s;
-        }
-
-        /* Gradient flow */
-        @keyframes gradient-flow {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-
-        .animate-gradient-flow {
-          background-size: 200% auto;
-          animation: gradient-flow 8s ease infinite;
-        }
-
-        /* Gradient XY */
-        @keyframes gradient-xy {
-          0%, 100% { background-position: 0% 0%; }
-          25% { background-position: 100% 0%; }
-          50% { background-position: 100% 100%; }
-          75% { background-position: 0% 100%; }
-        }
-
-        .animate-gradient-xy {
-          background-size: 200% 200%;
-          animation: gradient-xy 8s ease infinite;
-        }
-
-        /* Pulse variations */
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 0.1; transform: scale(1); }
-          50% { opacity: 0.2; transform: scale(1.1); }
-        }
-
-        @keyframes pulse-slow-delayed {
-          0%, 100% { opacity: 0.1; transform: scale(1); }
-          50% { opacity: 0.2; transform: scale(1.1); }
-        }
-
-        @keyframes pulse-gentle {
-          0%, 100% { opacity: 0; }
-          50% { opacity: 1; }
-        }
-
-        .animate-pulse-slow {
-          animation: pulse-slow 6s ease-in-out infinite;
-        }
-
-        .animate-pulse-slow-delayed {
-          animation: pulse-slow-delayed 6s ease-in-out 2s infinite;
-        }
-
-        .animate-pulse-gentle {
-          animation: pulse-gentle 2s ease-in-out infinite;
-        }
-
-        /* Ping effect */
-        @keyframes ping-slow {
-          75%, 100% {
-            transform: scale(2);
-            opacity: 0;
-          }
-        }
-
-        .animate-ping-slow {
-          animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
-
-        /* Spin slow */
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-
-        .animate-spin-slow {
-          animation: spin-slow 10s linear infinite;
-        }
-
-        /* Bounce subtle */
-        @keyframes bounce-subtle {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-4px); }
-        }
-
-        .animate-bounce-subtle {
-          animation: bounce-subtle 2s ease-in-out infinite;
-        }
-
-        /* Fade in up */
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(40px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* Slide in right */
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        /* Fade in */
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-      `}</style>
-    </div>
-  );
+        </section>
+    );
 };
+
+// Extracted from Lucide since we can't import ArrowRight in the same import statement if it wasn't there
+function ArrowRight({ size = 24, className = "" }) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+        >
+            <path d="M5 12h14"></path>
+            <path d="m12 5 7 7-7 7"></path>
+        </svg>
+    );
+}
 
 export default CertificationsLearning;

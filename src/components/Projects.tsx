@@ -1,7 +1,6 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { ExternalLink, MoreVertical, Github, Eye, Star, Code, Zap, Database, Cloud, Sparkles } from 'lucide-react';
+import { projects as portfolioProjects } from '../data/portfolio';
 
 const EnhancedProjects = () => {
     const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -16,52 +15,34 @@ const EnhancedProjects = () => {
         return () => window.removeEventListener('mousemove', handleMouseMove);
     }, []);
 
-    const projects = [
-        {
-            id: 1,
-            title: 'Employee Management System',
-            description: 'A comprehensive system for managing employee data, roles, and departments with authentication and CRUD operations.',
-            gradient: 'from-purple-500 to-indigo-600',
-            icon: Database,
-            tags: ['Spring Boot', 'REST APIs', 'MySQL', 'Bootstrap'],
-            github: '#',
-            demo: '#',
-            stars: 24
-        },
-        {
-            id: 2,
-            title: 'Enterprise Web Application',
-            description: 'Scalable web application with microservices architecture, JWT authentication, and real-time processing.',
-            gradient: 'from-blue-500 to-cyan-600',
-            icon: Cloud,
-            tags: ['Java', 'React', 'Microservices', 'Docker'],
-            github: '#',
-            demo: '#',
-            stars: 31
-        },
-        {
-            id: 3,
-            title: 'Industrial UI Dashboard',
-            description: 'WPF desktop application with real-time machine interaction and monitoring for industrial use.',
-            gradient: 'from-violet-500 to-purple-600',
-            icon: Zap,
-            tags: ['C#', 'WPF', '.NET', 'SQL Server'],
-            github: '#',
-            demo: '#',
-            stars: 18
-        },
-        {
-            id: 4,
-            title: 'API Integration Platform',
-            description: 'RESTful API platform enabling seamless integration between services with comprehensive documentation.',
-            gradient: 'from-indigo-500 to-blue-600',
-            icon: Code,
-            tags: ['Spring Boot', 'Swagger', 'JWT', 'Oracle'],
-            github: '#',
-            demo: '#',
-            stars: 27
-        }
-    ];
+    // Merge portfolio data with UI metadata (icons, gradients, etc.)
+    const iconMap: { [key: string]: any } = {
+        'Database': Database,
+        'Cloud': Cloud,
+        'Zap': Zap,
+        'Code': Code
+    };
+
+    const gradientMap: { [key: number]: string } = {
+        0: 'from-purple-500 to-indigo-600',
+        1: 'from-blue-500 to-cyan-600',
+        2: 'from-violet-500 to-purple-600',
+        3: 'from-indigo-500 to-blue-600'
+    };
+
+    const iconSequence = [Database, Cloud, Zap, Code];
+
+    const projects = portfolioProjects.map((p, i) => ({
+        id: i + 1,
+        title: p.title,
+        description: p.desc,
+        gradient: gradientMap[i % 4],
+        icon: iconSequence[i % 4],
+        tags: p.tech,
+        github: p.github,
+        demo: p.demo,
+        stars: 10 + (i * 7) // Mock stars or fetch from API later
+    }));
 
     const toggleStar = (id: number) => {
         setStarredProjects(prev => ({
@@ -74,41 +55,17 @@ const EnhancedProjects = () => {
     const projectRows = [projects.slice(0, 2), projects.slice(2, 4)];
 
     return (
-        <div className="min-h-screen bg-slate-950 py-20 px-4 overflow-hidden relative">
+        <div id="projects" className="min-h-screen bg-slate-50 dark:bg-slate-950 py-20 px-4 overflow-hidden relative transition-colors duration-300">
             {/* Advanced Animated Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 {/* Gradient Orbs with continuous animation */}
                 <div className="absolute top-0 left-0 w-full h-full">
-                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"></div>
-                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-float-delayed"></div>
-                    <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl animate-float-slow"></div>
+                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl animate-float"></div>
+                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-3xl animate-float-delayed"></div>
+                    <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/10 dark:bg-cyan-500/15 rounded-full blur-3xl animate-float-slow"></div>
                 </div>
                 {/* Grid Pattern */}
-                <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-                {/* Animated gradient mesh */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-transparent to-blue-900/10 animate-gradient-shift"></div>
-                {/* Floating particles */}
-                {[...Array(20)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="absolute w-1 h-1 bg-purple-400/30 rounded-full animate-particle"
-                        style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            animationDelay: `${Math.random() * 5}s`,
-                            animationDuration: `${10 + Math.random() * 10}s`
-                        }}
-                    ></div>
-                ))}
-                {/* Mouse follower gradient */}
-                <div
-                    className="absolute w-96 h-96 bg-purple-500/5 rounded-full blur-3xl transition-all duration-300 ease-out pointer-events-none"
-                    style={{
-                        left: `${mousePosition.x}px`,
-                        top: `${mousePosition.y}px`,
-                        transform: 'translate(-50%, -50%)'
-                    }}
-                ></div>
+                <div className="absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10"></div>
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10">
@@ -119,35 +76,32 @@ const EnhancedProjects = () => {
                     <div className="inline-block mb-6 relative group">
                         {/* Animated border */}
                         <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 rounded-full blur opacity-75 group-hover:opacity-100 animate-gradient-xy"></div>
-                        <span className="relative flex items-center gap-2 text-sm font-semibold text-purple-300 tracking-widest uppercase bg-slate-900/90 backdrop-blur-sm px-6 py-3 rounded-full border border-purple-500/30">
+                        <span className="relative flex items-center gap-2 text-sm font-semibold text-purple-600 dark:text-purple-300 tracking-widest uppercase bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-6 py-3 rounded-full border border-purple-500/30">
                             <Sparkles className="w-4 h-4 animate-spin-slow" />
                             Projects
                             <Sparkles className="w-4 h-4 animate-spin-slow-reverse" />
                         </span>
                     </div>
                     {/* Main Heading with advanced effects */}
-                    <div className="relative inline-block mb-6">
-                        {/* Glow effect behind text */}
-                        <div className="absolute inset-0 blur-2xl bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 opacity-30 animate-pulse-slow"></div>
-                        <h2 className="relative text-6xl md:text-7xl lg:text-8xl font-black mb-2">
-                            <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 animate-gradient-x">
-                                Featured Work
-                            </span>
-                        </h2>
-                        {/* Animated underline */}
-                        <div className="relative h-1 mt-4 mx-auto max-w-md overflow-hidden rounded-full bg-slate-800">
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 animate-shimmer"></div>
+                    <div className="relative flex flex-col items-center gap-6 mb-6">
+                        <div className="relative">
+                            {/* Glow effect behind text */}
+                            <div className="absolute inset-0 blur-2xl bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 opacity-20 dark:opacity-30 animate-pulse-slow"></div>
+                            <h2 className="relative text-6xl md:text-7xl lg:text-8xl font-black dark:text-white text-slate-900">
+                                <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 animate-gradient-x">
+                                    Featured Work
+                                </span>
+                            </h2>
                         </div>
+
+
                     </div>
-                    <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed relative">
+                    <p className="text-slate-600 dark:text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed relative">
                         A curated selection of projects showcasing my expertise in{' '}
-                        <span className="text-purple-400 font-semibold animate-text-shine">full-stack development</span>
+                        <span className="text-purple-600 dark:text-purple-400 font-semibold animate-text-shine">full-stack development</span>
                         {' '}and{' '}
-                        <span className="text-blue-400 font-semibold animate-text-shine-delayed">modern architecture</span>
+                        <span className="text-blue-600 dark:text-blue-400 font-semibold animate-text-shine-delayed">modern architecture</span>
                     </p>
-                    {/* Decorative corner elements */}
-                    <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-purple-500/20 rounded-tl-3xl animate-border-glow"></div>
-                    <div className="absolute top-0 right-0 w-20 h-20 border-t-2 border-r-2 border-blue-500/20 rounded-tr-3xl animate-border-glow-delayed"></div>
                 </div>
 
                 {/* Projects Grid: 2 rows, 2 cards per row */}
@@ -170,7 +124,7 @@ const EnhancedProjects = () => {
                                         {/* Continuous rotating border */}
                                         <div className={`absolute -inset-0.5 bg-gradient-to-r ${project.gradient} rounded-2xl opacity-0 group-hover:opacity-100 blur-sm transition duration-500 animate-gradient-xy`}></div>
                                         {/* Main Card */}
-                                        <div className="relative bg-slate-900/95 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-500 h-full flex flex-col shadow-2xl hover:shadow-purple-500/10">
+                                        <div className="relative bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl p-6 border border-slate-200 dark:border-slate-700/50 hover:border-slate-300 dark:hover:border-slate-600/50 transition-all duration-500 h-full flex flex-col shadow-lg dark:shadow-2xl hover:shadow-purple-500/10">
                                             {/* Animated corner accents */}
                                             <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-purple-500/0 group-hover:border-purple-500/50 rounded-tl-2xl transition-all duration-500"></div>
                                             <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-blue-500/0 group-hover:border-blue-500/50 rounded-br-2xl transition-all duration-500"></div>
@@ -185,25 +139,29 @@ const EnhancedProjects = () => {
                                                     {/* Star Button with animation */}
                                                     <button
                                                         onClick={() => toggleStar(project.id)}
-                                                        className={`p-2 rounded-lg transition-all duration-300 transform hover:scale-110 ${isStarred
-                                                                ? 'bg-yellow-500/20 text-yellow-400 animate-bounce-subtle'
-                                                                : 'bg-slate-800/80 text-gray-400 hover:bg-slate-700 hover:text-yellow-400'
+                                                        className={`p-2 rounded-lg transition-all duration-300 transform hover:scale-110 focus-ring ${isStarred
+                                                            ? 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 animate-bounce-subtle'
+                                                            : 'bg-slate-100 dark:bg-slate-800/80 text-slate-400 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-yellow-500 dark:hover:text-yellow-400'
                                                             }`}
+                                                        aria-label={isStarred ? "Remove star from project" : "Star this project"}
                                                         title={isStarred ? "Unstar" : "Star this project"}
                                                     >
                                                         <Star className={`w-4 h-4 transition-transform duration-300 ${isStarred ? 'fill-current scale-110' : ''}`} />
                                                     </button>
                                                     {/* Menu Button */}
-                                                    <button className="p-2 rounded-lg bg-slate-800/80 text-gray-400 hover:bg-slate-700 hover:text-white transition-all duration-300 transform hover:scale-110 hover:rotate-90">
+                                                    <button
+                                                        className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-400 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-all duration-300 transform hover:scale-110 hover:rotate-90 focus-ring"
+                                                        aria-label="View project options"
+                                                    >
                                                         <MoreVertical className="w-4 h-4" />
                                                     </button>
                                                 </div>
                                             </div>
                                             {/* Project Title & Description */}
-                                            <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-blue-400 transition-all duration-300">
+                                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-blue-600 dark:group-hover:from-purple-400 dark:group-hover:to-blue-400 transition-all duration-300">
                                                 {project.title}
                                             </h3>
-                                            <p className="text-gray-400 mb-6 flex-grow leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
+                                            <p className="text-slate-600 dark:text-gray-400 mb-6 flex-grow leading-relaxed group-hover:text-slate-800 dark:group-hover:text-gray-300 transition-colors duration-300">
                                                 {project.description}
                                             </p>
                                             {/* Tags */}
@@ -211,7 +169,7 @@ const EnhancedProjects = () => {
                                                 {project.tags.map((tag, idx) => (
                                                     <span
                                                         key={idx}
-                                                        className="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-800/80 text-gray-300 border border-slate-700/50 hover:border-purple-500/50 hover:text-purple-300 hover:bg-slate-700/80 transition-all duration-300 cursor-default transform hover:-translate-y-1"
+                                                        className="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-gray-300 border border-slate-200 dark:border-slate-700/50 hover:border-purple-500/50 hover:text-purple-600 dark:hover:text-purple-300 hover:bg-white dark:hover:bg-slate-700/80 transition-all duration-300 cursor-default transform hover:-translate-y-1"
                                                         style={{
                                                             animation: hoveredCard === project.id ? `tagFloat 0.6s ease-out ${idx * 0.1}s both` : 'none'
                                                         }}
@@ -221,16 +179,17 @@ const EnhancedProjects = () => {
                                                 ))}
                                             </div>
                                             {/* Action Buttons */}
-                                            <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
-                                                <div className="flex items-center gap-2 text-gray-400 text-sm group/stars">
-                                                    <Star className="w-4 h-4 group-hover/stars:text-yellow-400 group-hover/stars:fill-current transition-all duration-300" />
+                                            <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-700/50">
+                                                <div className="flex items-center gap-2 text-slate-500 dark:text-gray-400 text-sm group/stars">
+                                                    <Star className="w-4 h-4 group-hover/stars:text-yellow-500 dark:group-hover/stars:text-yellow-400 group-hover/stars:fill-current transition-all duration-300" />
                                                     <span className="font-semibold">{project.stars + (isStarred ? 1 : 0)}</span>
                                                 </div>
                                                 <div className="flex gap-3">
                                                     {/* GitHub Button */}
                                                     <button
                                                         onClick={() => window.open(project.github, '_blank')}
-                                                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/80 text-gray-300 hover:bg-slate-700 hover:text-white transition-all duration-300 group/btn transform hover:scale-105"
+                                                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-all duration-300 group/btn transform hover:scale-105 focus-ring"
+                                                        aria-label={`View ${project.title} source code on GitHub`}
                                                         title="View source code"
                                                     >
                                                         <Github className="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-300" />
@@ -238,21 +197,18 @@ const EnhancedProjects = () => {
                                                     </button>
                                                     {/* Live Demo Button with pulse */}
                                                     <button
-                                                        onClick={() => window.open(project.demo, '_blank')}
-                                                        className={`relative flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r ${project.gradient} text-white hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 group/btn transform hover:scale-105 overflow-hidden`}
-                                                        title="View live demo"
+                                                        onClick={() => {
+                                                            window.location.href = `/projects/${project.id}`;
+                                                        }}
+                                                        className={`relative flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r ${project.gradient} text-white hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 group/btn transform hover:scale-105 overflow-hidden focus-ring`}
+                                                        aria-label={`View ${project.title} project details`}
+                                                        title="View project details"
                                                     >
                                                         <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700"></div>
                                                         <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300 relative z-10" />
-                                                        <span className="text-sm font-medium relative z-10">Demo</span>
+                                                        <span className="text-sm font-medium relative z-10">View</span>
                                                     </button>
                                                 </div>
-                                            </div>
-                                            {/* Hover overlay effect */}
-                                            <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-500 pointer-events-none`}></div>
-                                            {/* Scanning line effect */}
-                                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden rounded-2xl">
-                                                <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent animate-scan"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -261,22 +217,9 @@ const EnhancedProjects = () => {
                         </div>
                     ))}
                 </div>
-
-                {/* View All Projects Button */}
-                <div className="text-center mt-16">
-                    <button className="group relative px-8 py-4 rounded-xl bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white font-semibold hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 overflow-hidden transform hover:scale-105">
-                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-gradient-x"></div>
-                        <span className="relative z-10 flex items-center gap-2">
-                            View All Projects
-                            <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-                        </span>
-                        {/* Shine effect */}
-                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"></div>
-                    </button>
-                </div>
             </div>
             {/* Animations and styles are injected inline for this section */}
-            <style>{`
+            < style > {`
                 .bg-grid-pattern {
                     background-image: 
                         linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
@@ -443,49 +386,9 @@ const EnhancedProjects = () => {
                         transform: translateY(0);
                     }
                 }
-            `}</style>
-        </div>
+            `}</style >
+        </div >
     );
 };
 
 export default EnhancedProjects;
-
-function spawnParticles(el: Element) {
-    try {
-        const wrapper = el.closest('.github-cta') as HTMLElement | null
-        if (!wrapper) return
-        const layer = wrapper.querySelector('.particle-layer') as HTMLElement
-        if (!layer) return
-
-        const count = 18
-        const particles: HTMLElement[] = []
-        for (let i = 0; i < count; i++) {
-            const p = document.createElement('span')
-            p.className = 'gh-particle'
-            // random angle and radius
-            const angle = Math.random() * Math.PI * 2
-            const radius = 26 + Math.random() * 40
-            const x = Math.cos(angle) * radius
-            const y = Math.sin(angle) * radius
-            p.style.left = `calc(50% + ${x}px)`
-            p.style.top = `calc(50% + ${y}px)`
-            p.style.width = `${4 + Math.random() * 6}px`
-            p.style.height = p.style.width
-            p.style.opacity = `${0.6 + Math.random() * 0.4}`
-            layer.appendChild(p)
-            particles.push(p)
-
-            // trigger orbit animation then rush to center
-            // stagger timings
-            const orbitDuration = 900 + Math.random() * 600
-            p.style.animation = `gh-orbit ${orbitDuration}ms linear forwards ${i * 20}ms, gh-rush 600ms cubic-bezier(.2,.9,.3,1) forwards ${orbitDuration + i * 20}ms`
-        }
-
-        // cleanup
-        setTimeout(() => {
-            particles.forEach((p) => p.remove())
-        }, 2500)
-    } catch (err) {
-        // ignore
-    }
-}

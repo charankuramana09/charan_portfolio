@@ -1,54 +1,94 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import Navbar from './components/Navbar'
 import PremiumHero from './components/PremiumHero';
-import About from './components/About';
-import Skills from './components/Skills';
-import Projects from './components/Projects';
-import Certifications from './components/Certifications';
-import CertificationsLearning from './components/CertificationsLearning';
-import LayoutShuffleDemo from './components/LayoutShuffleDemo';
-import CardsDemoPage from './components/CardsDemoPage';
-import Experience from './components/Experience';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Blog from './pages/Blog';
-import ProjectsPage from './pages/Projects';
+import ScrollToTop from './components/ScrollToTop';
+import PageLoader from './components/PageLoader';
+import ErrorBoundary from './components/ErrorBoundary';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Analytics } from '@vercel/analytics/react';
+
+// Lazy load pages for better performance
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const ProjectsPage = lazy(() => import('./pages/Projects'));
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
+const ThankYou = lazy(() => import('./pages/ThankYou'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+// Lazy load home sections for better performance
+const TechStack = lazy(() => import('./components/TechStack'));
+const About = lazy(() => import('./components/About'));
+const Skills = lazy(() => import('./components/Skills'));
+const Projects = lazy(() => import('./components/Projects'));
+const CertificationsLearning = lazy(() => import('./components/CertificationsLearning'));
+const Experience = lazy(() => import('./components/Experience'));
+const Testimonials = lazy(() => import('./components/Testimonials'));
+const Contact = lazy(() => import('./components/Contact'));
+import CursorTrail from './components/CursorTrail';
 
 export default function App() {
     const location = useLocation();
+
+    // Performance Monitoring
+    React.useEffect(() => {
+        if ('connection' in navigator && (navigator as any).connection.saveData) {
+            console.log('Low power mode / Save data enabled. Reducing animations.');
+        }
+    }, []);
+
     return (
-        <div className="min-h-screen">
-            <Navbar />
-            <AnimatePresence mode="wait" initial={false}>
-                <motion.main
-                    key={location.pathname}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4 }}
+        <ErrorBoundary>
+            <div className="min-h-screen">
+                <CursorTrail />
+                <a
+                    href="#main-content"
+                    className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-indigo-600 focus:text-white focus:rounded-lg focus:shadow-2xl focus:outline-none transition-all"
                 >
-                    <Routes location={location}>
-                        <Route path="/" element={
-                            <>
-                                <PremiumHero />
-                                <About />
-                                <Skills />
-                                <Projects />
-                                {/* <Certifications /> */}
-                                <CertificationsLearning />
-                                {/* <CardsDemoPage /> */}
-                                <Experience />
-                                <Contact />
-                            </>
-                        } />
-                        <Route path="/blog" element={<Blog />} />
-                        <Route path="/projects" element={<ProjectsPage />} />
-                    </Routes>
-                </motion.main>
-            </AnimatePresence>
-            <Footer />
-        </div>
+                    Skip to Content
+                </a>
+                <Navbar />
+                <ScrollToTop />
+                <AnimatePresence mode="wait" initial={false}>
+                    <motion.main
+                        id="main-content"
+                        key={location.pathname}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                    >
+                        <Suspense fallback={<PageLoader />}>
+                            <Routes location={location}>
+                                <Route path="/" element={
+                                    <>
+                                        <PremiumHero />
+                                        <Suspense fallback={<div className="h-40 flex items-center justify-center"><PageLoader /></div>}>
+                                            <TechStack />
+                                            <About />
+                                            <Skills />
+                                            <Projects />
+                                            <CertificationsLearning />
+                                            <Testimonials />
+                                            <Experience />
+                                            <Contact />
+                                        </Suspense>
+                                    </>
+                                } />
+                                <Route path="/blog" element={<Blog />} />
+                                <Route path="/blog/:slug" element={<BlogPost />} />
+                                <Route path="/projects" element={<ProjectsPage />} />
+                                <Route path="/projects/:id" element={<ProjectDetail />} />
+                                <Route path="/thank-you" element={<ThankYou />} />
+                                <Route path="*" element={<NotFound />} />
+                            </Routes>
+                        </Suspense>
+                    </motion.main>
+                </AnimatePresence>
+                <Footer />
+                <Analytics />
+            </div>
+        </ErrorBoundary>
     );
 }
