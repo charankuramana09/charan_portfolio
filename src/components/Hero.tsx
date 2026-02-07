@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react'
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
 import { hero } from '../data/portfolio'
 import { sectionVariant, item, hover, maskReveal, svgDraw, blurFocus, parallaxVariant, staggerForLength, morphShape } from '../motion/variants'
-import BackgroundGradient from './ui/background-gradient'
-import { StarfieldBackground } from './StarfieldBackground';
+import BackgroundGradient from '../shared/components/ui/background-gradient'
+import StarfieldBackground from '../shared/components/StarfieldBackground';
 import charanAvatar from '../assets/charan.png';
 
 export default function Hero() {

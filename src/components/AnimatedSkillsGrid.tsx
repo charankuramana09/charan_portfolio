@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { animatedSkills } from './animatedSkills.data';
+import { animatedSkills } from '../features/skills/animatedSkills.data';
 
 interface AnimatedSkillCardProps {
     category: { id: number; name: string; icon: string; color: string };

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import BackgroundGradient from "./ui/background-gradient";
+import BackgroundGradient from "../shared/components/ui/background-gradient";
 
 export default function BackgroundGradientDemo() {
     return (

@@ -1,6 +1,6 @@
 import React from 'react'
-import Section from './Section'
-import CardDemo from './ui/cards-demo-3'
+import Section from '../shared/components/Section'
+import CardDemo from '../shared/components/ui/cards-demo-3'
 
 export default function CardsDemoPage() {
     return (

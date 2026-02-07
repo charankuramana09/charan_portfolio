@@ -1,6 +1,6 @@
 // SkillsGrid.tsx
 import React from 'react';
-import { skills } from './skills.data';
+import { skills } from '../features/skills/skills.data';
 import { SkillCard } from './SkillCard';
 
 /**
@@ -11,7 +11,7 @@ import { SkillCard } from './SkillCard';
 export const SkillsGrid: React.FC = () => {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-      {skills.map((skill, i) => (
+      {skills.map((skill: (typeof skills)[number], i: number) => (
         <SkillCard key={skill.id} skill={skill} index={i} />
       ))}
     </div>

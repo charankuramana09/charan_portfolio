@@ -51,8 +51,8 @@ const popularPosts = [
 
 import { blogPosts } from '../data/portfolio';
 import { Link } from 'react-router-dom';
-import GlitchText from '../components/ui/GlitchText';
-import BackgroundPaths from '../components/ui/BackgroundPaths';
+import GlitchText from '../shared/components/ui/GlitchText';
+import BackgroundPaths from '../shared/components/ui/BackgroundPaths';
 
 const allTags = Array.from(new Set(blogPosts.flatMap(post => post.tags)));
 

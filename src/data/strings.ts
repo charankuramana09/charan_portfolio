@@ -1,0 +1,60 @@
+export const strings = {
+    common: {
+        hireMe: "Hire Me",
+        downloadCV: "Download CV",
+        viewProjects: "View Projects",
+        connect: "CONNECT",
+        scrollDown: "Scroll Down",
+    },
+    navigation: {
+        home: "Home",
+        about: "About",
+        skills: "Skills",
+        experience: "Experience",
+        certifications: "Certifications",
+        projects: "Projects",
+        blog: "Blog",
+        contact: "Contact",
+        menu: "MENU",
+    },
+    hero: {
+        name: "Charan Kuramana",
+        title: "Full Stack Java & React Developer",
+        subtitle: "Building scalable, secure, and user-focused web applications",
+        shortBio: "Full Stack Developer at iSign Tech with hands-on experience in Java, Spring Boot, Microservices, React, Angular, and cloud-native tools.",
+    },
+    about: {
+        title: "About",
+        subtitle: "Me",
+        profileAlt: "Charan Kuramana - Professional Portrait",
+        featuredSkills: "Featured Skills",
+    },
+    skills: {
+        title: "Technical",
+        highlight: "Excellence",
+        description: "A comprehensive ecosystem of tools and technologies I use to bring complex ideas to life.",
+        proficiencies: "Core Proficiencies",
+    },
+    testimonials: {
+        title: "Trusted by",
+        highlight: "Visionaries",
+        label: "Testimonials",
+    },
+    contact: {
+        title: "Let's Work Together",
+        subtitle: "Have a project in mind? Let's discuss how we can collaborate to bring your ideas to life.",
+        emailLabel: "Email",
+        linkedinLabel: "LinkedIn",
+        formName: "Name",
+        formEmail: "Email",
+        formSubject: "Subject",
+        formMessage: "Message",
+        submitButton: "Send Message",
+        successMessage: "Message sent successfully! I'll get back to you soon.",
+        errorEmptyMessage: "Please enter a message",
+    },
+    footer: {
+        rights: "All rights reserved.",
+        backToTop: "Back to top",
+    }
+};

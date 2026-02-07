@@ -1,11 +1,11 @@
 import React, { Suspense, lazy } from 'react'
-import Navbar from './components/Navbar'
-import PremiumHero from './components/PremiumHero';
-import Footer from './components/Footer';
-import ScrollToTop from './components/ScrollToTop';
-import PageLoader from './components/PageLoader';
-import ErrorBoundary from './components/ErrorBoundary';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import Navbar from './shared/components/Navbar'
+import PremiumHero from './features/hero/PremiumHero';
+import Footer from './shared/components/Footer';
+import ScrollToTop from './shared/components/ScrollToTop';
+import PageLoader from './shared/components/PageLoader';
+import ErrorBoundary from './shared/components/ErrorBoundary';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -18,15 +18,15 @@ const ThankYou = lazy(() => import('./pages/ThankYou'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Lazy load home sections for better performance
-const TechStack = lazy(() => import('./components/TechStack'));
-const About = lazy(() => import('./components/About'));
-const Skills = lazy(() => import('./components/Skills'));
-const Projects = lazy(() => import('./components/Projects'));
-const CertificationsLearning = lazy(() => import('./components/CertificationsLearning'));
-const Experience = lazy(() => import('./components/Experience'));
-const Testimonials = lazy(() => import('./components/Testimonials'));
-const Contact = lazy(() => import('./components/Contact'));
-import CursorTrail from './components/CursorTrail';
+const TechStack = lazy(() => import('./features/techstack/TechStack'));
+const About = lazy(() => import('./features/about/About'));
+const Skills = lazy(() => import('./features/skills/Skills'));
+const Projects = lazy(() => import('./features/projects/Projects'));
+const CertificationsLearning = lazy(() => import('./features/certifications/CertificationsLearning'));
+const Experience = lazy(() => import('./features/experience/Experience'));
+const Testimonials = lazy(() => import('./features/testimonials/Testimonials'));
+const Contact = lazy(() => import('./features/contact/Contact'));
+import CursorTrail from './shared/components/CursorTrail';
 
 export default function App() {
     const location = useLocation();
@@ -37,6 +37,31 @@ export default function App() {
             console.log('Low power mode / Save data enabled. Reducing animations.');
         }
     }, []);
+
+    React.useEffect(() => {
+        if (location.pathname !== '/' || !location.hash) return;
+
+        const id = location.hash.replace('#', '');
+        if (!id) return;
+
+        let attempts = 0;
+        const maxAttempts = 8;
+
+        const scrollToSection = () => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
+
+            attempts += 1;
+            if (attempts < maxAttempts) {
+                setTimeout(scrollToSection, 150);
+            }
+        };
+
+        scrollToSection();
+    }, [location.pathname, location.hash]);
 
     return (
         <ErrorBoundary>
@@ -69,9 +94,9 @@ export default function App() {
                                             <About />
                                             <Skills />
                                             <Projects />
+                                            <Experience />
                                             <CertificationsLearning />
                                             <Testimonials />
-                                            <Experience />
                                             <Contact />
                                         </Suspense>
                                     </>
@@ -81,6 +106,7 @@ export default function App() {
                                 <Route path="/projects" element={<ProjectsPage />} />
                                 <Route path="/projects/:id" element={<ProjectDetail />} />
                                 <Route path="/thank-you" element={<ThankYou />} />
+                                <Route path="/charan_portfolio/*" element={<Navigate to="/#home" replace />} />
                                 <Route path="*" element={<NotFound />} />
                             </Routes>
                         </Suspense>

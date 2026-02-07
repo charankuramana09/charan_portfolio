@@ -60,7 +60,15 @@ export default function ProjectDetail() {
 
                             {project.image && (
                                 <div className="rounded-3xl overflow-hidden mb-16 shadow-2xl border border-slate-200 dark:border-white/5">
-                                    <img src={project.image} alt={project.title} className="w-full h-auto object-cover" />
+                                    <img
+                                        src={project.image}
+                                        alt={project.title}
+                                        className="w-full h-auto object-cover"
+                                        onError={(e) => {
+                                            const target = e.currentTarget;
+                                            target.src = 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80';
+                                        }}
+                                    />
                                 </div>
                             )}
 

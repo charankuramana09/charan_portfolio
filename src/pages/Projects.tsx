@@ -4,12 +4,12 @@ import { Helmet } from 'react-helmet-async';
 
 import { projectsData } from '../data/projectsData';
 import { Link } from 'react-router-dom';
-import BackgroundBeams from '../components/ui/BackgroundBeams';
+import BackgroundBeams from '../shared/components/ui/BackgroundBeams';
 
 const stats = [
     { number: '5', label: 'Projects Delivered' },
     { number: '15+', label: 'Technologies' },
-    { number: '2+', label: 'Years Experience' },
+    { number: '3+', label: 'Years Experience' },
     { number: '100%', label: 'Client Satisfaction' },
 ];
 
@@ -130,6 +130,20 @@ export default function ProjectsPage() {
                                     </div>
                                 </div>
                             </Link>
+                            {project.website && (
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        window.open(project.website, '_blank', 'noopener,noreferrer');
+                                    }}
+                                    className="absolute top-4 right-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-600 text-white shadow-lg hover:bg-indigo-700 transition-colors"
+                                    aria-label={`View ${project.title} website`}
+                                    title="View website"
+                                >
+                                    View Website
+                                </button>
+                            )}
                         </motion.article>
                     ))}
                 </section>
