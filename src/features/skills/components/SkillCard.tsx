@@ -35,7 +35,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ title, icon, iconColor, skills, d
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay, ease: 'easeOut' }}
             onMouseMove={handleMouseMove}
-            className="group relative bg-white dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 border border-slate-200 dark:border-white/5 hover:border-indigo-500/30 transition-all duration-500 overflow-hidden h-full shadow-lg dark:shadow-none"
+            className="group relative bg-white dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 border border-slate-200 dark:border-white/5 hover:border-indigo-500/30 transition-all duration-500 overflow-hidden h-full w-full min-w-0 shadow-lg dark:shadow-none"
         >
             <div
                 className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"

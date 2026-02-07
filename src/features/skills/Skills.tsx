@@ -106,9 +106,9 @@ const Skills: React.FC = () => {
                 </div>
 
                 {/* Main Skill Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-24" role="list">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 auto-rows-fr items-stretch mb-24" role="list">
                     {skillCategories.map((cat, idx) => (
-                        <div key={cat.title} role="listitem">
+                        <div key={cat.title} role="listitem" className="min-w-0 h-full">
                             <SkillCard
                                 title={cat.title}
                                 icon={cat.icon}
