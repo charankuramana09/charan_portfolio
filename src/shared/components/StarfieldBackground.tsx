@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { cn } from "../../lib/utils";
+import { usePerformanceMode } from "../../lib/usePerformanceMode";
 
 export interface StarfieldBackgroundProps {
   className?: string;
@@ -28,8 +29,15 @@ export default function StarfieldBackground({
 }: StarfieldBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { reducedMotion, lowPower } = usePerformanceMode();
+  const animationsEnabled = !reducedMotion && !lowPower;
+  const effectiveCount = animationsEnabled ? count : Math.min(120, count);
+  const effectiveSpeed = animationsEnabled ? speed : Math.min(0.15, speed);
+  const effectiveTwinkle = animationsEnabled ? twinkle : false;
 
   useEffect(() => {
+    if (!animationsEnabled) return;
+
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
@@ -58,7 +66,7 @@ export default function StarfieldBackground({
       twinkleOffset: Math.random() * Math.PI * 2,
     });
 
-    const stars: Star[] = Array.from({ length: count }, () => createStar());
+    const stars: Star[] = Array.from({ length: effectiveCount }, () => createStar());
 
     const handleResize = () => {
       const rect = container.getBoundingClientRect();
@@ -78,7 +86,7 @@ export default function StarfieldBackground({
       const cx = width / 2;
       const cy = height / 2;
       for (const star of stars) {
-        star.z -= speed * 2;
+        star.z -= effectiveSpeed * 2;
         if (star.z <= 0) {
           star.x = (Math.random() - 0.5) * width * 2;
           star.y = (Math.random() - 0.5) * height * 2;
@@ -90,7 +98,7 @@ export default function StarfieldBackground({
         if (x < -10 || x > width + 10 || y < -10 || y > height + 10) continue;
         const size = Math.max(0.5, (1 - star.z / maxDepth) * 3);
         let opacity = (1 - star.z / maxDepth) * 0.9 + 0.1;
-        if (twinkle && star.twinkleSpeed > 0.015) {
+        if (effectiveTwinkle && star.twinkleSpeed > 0.015) {
           opacity *= 0.7 + 0.3 * Math.sin(tick * star.twinkleSpeed + star.twinkleOffset);
         }
         ctx.beginPath();
@@ -98,8 +106,8 @@ export default function StarfieldBackground({
         ctx.fillStyle = starColor;
         ctx.globalAlpha = opacity;
         ctx.fill();
-        if (star.z < maxDepth * 0.3 && speed > 0.3) {
-          const streakLength = (1 - star.z / maxDepth) * speed * 8;
+        if (star.z < maxDepth * 0.3 && effectiveSpeed > 0.3) {
+          const streakLength = (1 - star.z / maxDepth) * effectiveSpeed * 8;
           const angle = Math.atan2(star.y, star.x);
           ctx.beginPath();
           ctx.moveTo(x, y);
@@ -122,7 +130,7 @@ export default function StarfieldBackground({
       cancelAnimationFrame(animationId);
       ro.disconnect();
     };
-  }, [count, speed, starColor, twinkle]);
+  }, [animationsEnabled, effectiveCount, effectiveSpeed, starColor, effectiveTwinkle]);
 
   return (
     <div
@@ -130,7 +138,9 @@ export default function StarfieldBackground({
       className={cn("relative w-full overflow-hidden bg-white dark:bg-[#0a0a0f]", className)}
       style={{ minHeight: '100%', minWidth: '100%' }}
     >
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full dark:opacity-100 opacity-0 transition-opacity duration-300" />
+      {animationsEnabled && (
+        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full dark:opacity-100 opacity-0 transition-opacity duration-300" />
+      )}
       <div
         className="pointer-events-none absolute inset-0 opacity-30 dark:block hidden"
         style={{

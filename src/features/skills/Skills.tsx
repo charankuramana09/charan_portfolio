@@ -122,7 +122,7 @@ const Skills: React.FC = () => {
                 </div>
 
                 {/* Core Proficiencies */}
-                <section className="proficiencies-section mt-10 w-screen relative left-1/2 right-1/2 -mx-[50vw]" aria-label={strings.skills.proficiencies}>
+                <section className="proficiencies-section mt-10 w-full relative left-0 right-0 mx-0 sm:w-screen sm:left-1/2 sm:right-1/2 sm:-mx-[50vw]" aria-label={strings.skills.proficiencies}>
                     <div className="animated-background" aria-hidden="true">
                         <div className="wave-container">
                             <div className="wave" />
@@ -220,10 +220,12 @@ const Skills: React.FC = () => {
                                         e.currentTarget.style.removeProperty('--mouse-y');
                                     }}
                                 >
-                                    <div className="skill-icon" aria-hidden="true" />
                                     <div className="skill-header">
-                                        <div className="skill-name">{stat.name}</div>
-                                        <div className="skill-percentage">{stat.level}%</div>
+                                        <div className="skill-title">
+                                            <div className="skill-name">{stat.name}</div>
+                                            <div className="skill-percentage">{stat.level}%</div>
+                                        </div>
+                                        <div className="skill-icon" aria-hidden="true" />
                                     </div>
                                     <div className="progress-container">
                                         <div className="progress-bar" style={{ width: `${stat.level}%` }} />

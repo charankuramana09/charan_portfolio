@@ -1,11 +1,11 @@
-import charanAvatar from '../assets/charan.png';
-import masteringFullStackImg from '../assets/Master_of_fullstack.png';
-import springbootMicroservicesImg from '../assets/springboot_microservices.png';
-import uiUxPatternImg from '../assets/UI_UX Patern.png';
-import zohoCreatorImg from '../assets/zoho_creator.png';
-import razorpayArchitectureImg from '../assets/razorpay_architecture.png';
-import springbootDockerMysqlImg from '../assets/springboot_docker_mysql.png';
-import kafkaDockerImg from '../assets/kafka_docker.png';
+import charanAvatar from '../assets/charan.webp';
+import masteringFullStackImg from '../assets/Master_of_fullstack.webp';
+import springbootMicroservicesImg from '../assets/springboot_microservices.webp';
+import uiUxPatternImg from '../assets/UI_UX Patern.webp';
+import zohoCreatorImg from '../assets/zoho_creator.webp';
+import razorpayArchitectureImg from '../assets/razorpay_architecture.webp';
+import springbootDockerMysqlImg from '../assets/springboot_docker_mysql.webp';
+import kafkaDockerImg from '../assets/kafka_docker.webp';
 
 export const hero = {
   title: "Full Stack Java & React Developer",
@@ -174,7 +174,7 @@ export const projects = [
 ];
 
 export const contact = {
-  email: "kura.radha.krishna@gmail.com",
+  email: "charank.fullstackdeveloper@gmail.com",
   linkedin: "https://www.linkedin.com/in/charan-kuramana-145282249",
 };
 

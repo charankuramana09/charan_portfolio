@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import React from "react"
 import { cn } from "../../../lib/utils"
+import { usePerformanceMode } from "../../../lib/usePerformanceMode"
 
 export interface BackgroundBeamsProps {
     className?: string
@@ -39,6 +40,9 @@ const animations = pathData.map((_, i) => ({
 }))
 
 export const BackgroundBeams = React.memo(({ className }: BackgroundBeamsProps) => {
+    const { reducedMotion, lowPower } = usePerformanceMode()
+    const animationsEnabled = !reducedMotion && !lowPower
+
     return (
         <div className={cn("pointer-events-none absolute inset-0 h-full w-full", className)}>
             <svg
@@ -49,33 +53,34 @@ export const BackgroundBeams = React.memo(({ className }: BackgroundBeamsProps) 
                 preserveAspectRatio="xMidYMid slice"
             >
                 {/* Static faint paths for depth */}
-                <g opacity="0.03">
+                <g opacity={animationsEnabled ? "0.03" : "0.08"}>
                     {pathData.map((d, i) => (
                         <path key={`static-${i}`} d={d} stroke="white" strokeWidth="0.5" />
                     ))}
                 </g>
 
                 {/* Animated gradient beams */}
-                {pathData.map((d, i) => (
-                    <motion.path
-                        key={`beam-${i}`}
-                        d={d}
-                        stroke={`url(#gradient-beam-${i})`}
-                        strokeWidth="1"
-                        strokeLinecap="round"
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{
-                            pathLength: [0, 1],
-                            opacity: [0, 0.6, 0.6, 0],
-                        }}
-                        transition={{
-                            duration: animations[i].duration,
-                            delay: animations[i].delay,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "easeInOut",
-                        }}
-                    />
-                ))}
+                {animationsEnabled &&
+                    pathData.map((d, i) => (
+                        <motion.path
+                            key={`beam-${i}`}
+                            d={d}
+                            stroke={`url(#gradient-beam-${i})`}
+                            strokeWidth="1"
+                            strokeLinecap="round"
+                            initial={{ pathLength: 0, opacity: 0 }}
+                            animate={{
+                                pathLength: [0, 1],
+                                opacity: [0, 0.6, 0.6, 0],
+                            }}
+                            transition={{
+                                duration: animations[i].duration,
+                                delay: animations[i].delay,
+                                repeat: Number.POSITIVE_INFINITY,
+                                ease: "easeInOut",
+                            }}
+                        />
+                    ))}
 
                 <defs>
                     {pathData.map((_, i) => (

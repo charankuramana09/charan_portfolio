@@ -30,12 +30,48 @@ import CursorTrail from './shared/components/CursorTrail';
 
 export default function App() {
     const location = useLocation();
+    const [showInitialLoader, setShowInitialLoader] = React.useState(true);
 
     // Performance Monitoring
     React.useEffect(() => {
         if ('connection' in navigator && (navigator as any).connection.saveData) {
             console.log('Low power mode / Save data enabled. Reducing animations.');
         }
+    }, []);
+
+    React.useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        const hasShown = sessionStorage.getItem('initialLoaderShown');
+        if (hasShown) {
+            setShowInitialLoader(false);
+            return;
+        }
+
+        sessionStorage.setItem('initialLoaderShown', 'true');
+
+        let didCancel = false;
+        const minDelay = 900;
+        const start = performance.now();
+
+        const finish = () => {
+            const elapsed = performance.now() - start;
+            const remaining = Math.max(0, minDelay - elapsed);
+            window.setTimeout(() => {
+                if (!didCancel) setShowInitialLoader(false);
+            }, remaining);
+        };
+
+        if (document.readyState === 'complete') {
+            finish();
+        } else {
+            window.addEventListener('load', finish, { once: true });
+        }
+
+        return () => {
+            didCancel = true;
+            window.removeEventListener('load', finish);
+        };
     }, []);
 
     React.useEffect(() => {
@@ -65,56 +101,60 @@ export default function App() {
 
     return (
         <ErrorBoundary>
-            <div className="min-h-screen">
-                <CursorTrail />
-                <a
-                    href="#main-content"
-                    className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-indigo-600 focus:text-white focus:rounded-lg focus:shadow-2xl focus:outline-none transition-all"
-                >
-                    Skip to Content
-                </a>
-                <Navbar />
-                <ScrollToTop />
-                <AnimatePresence mode="wait" initial={false}>
-                    <motion.main
-                        id="main-content"
-                        key={location.pathname}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
+            {showInitialLoader ? (
+                <PageLoader />
+            ) : (
+                <div className="min-h-screen">
+                    <CursorTrail />
+                    <a
+                        href="#main-content"
+                        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-indigo-600 focus:text-white focus:rounded-lg focus:shadow-2xl focus:outline-none transition-all"
                     >
-                        <Suspense fallback={<PageLoader />}>
-                            <Routes location={location}>
-                                <Route path="/" element={
-                                    <>
-                                        <PremiumHero />
-                                        <Suspense fallback={<div className="h-40 flex items-center justify-center"><PageLoader /></div>}>
-                                            <TechStack />
-                                            <About />
-                                            <Skills />
-                                            <Projects />
-                                            <Experience />
-                                            <CertificationsLearning />
-                                            <Testimonials />
-                                            <Contact />
-                                        </Suspense>
-                                    </>
-                                } />
-                                <Route path="/blog" element={<Blog />} />
-                                <Route path="/blog/:slug" element={<BlogPost />} />
-                                <Route path="/projects" element={<ProjectsPage />} />
-                                <Route path="/projects/:id" element={<ProjectDetail />} />
-                                <Route path="/thank-you" element={<ThankYou />} />
-                                <Route path="/charan_portfolio/*" element={<Navigate to="/#home" replace />} />
-                                <Route path="*" element={<NotFound />} />
-                            </Routes>
-                        </Suspense>
-                    </motion.main>
-                </AnimatePresence>
-                <Footer />
-                <Analytics />
-            </div>
+                        Skip to Content
+                    </a>
+                    <Navbar />
+                    <ScrollToTop />
+                    <AnimatePresence mode="wait" initial={false}>
+                        <motion.main
+                            id="main-content"
+                            key={location.pathname}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                        >
+                            <Suspense fallback={<PageLoader />}>
+                                <Routes location={location}>
+                                    <Route path="/" element={
+                                        <>
+                                            <PremiumHero />
+                                            <Suspense fallback={<div className="h-40 flex items-center justify-center"><PageLoader /></div>}>
+                                                <TechStack />
+                                                <About />
+                                                <Skills />
+                                                <Projects />
+                                                <Experience />
+                                                <CertificationsLearning />
+                                                <Testimonials />
+                                                <Contact />
+                                            </Suspense>
+                                        </>
+                                    } />
+                                    <Route path="/blog" element={<Blog />} />
+                                    <Route path="/blog/:slug" element={<BlogPost />} />
+                                    <Route path="/projects" element={<ProjectsPage />} />
+                                    <Route path="/projects/:id" element={<ProjectDetail />} />
+                                    <Route path="/thank-you" element={<ThankYou />} />
+                                    <Route path="/charan_portfolio/*" element={<Navigate to="/#home" replace />} />
+                                    <Route path="*" element={<NotFound />} />
+                                </Routes>
+                            </Suspense>
+                        </motion.main>
+                    </AnimatePresence>
+                    <Footer />
+                    <Analytics />
+                </div>
+            )}
         </ErrorBoundary>
     );
 }

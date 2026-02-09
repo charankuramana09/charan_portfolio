@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { projectsData } from '../data/projectsData';
 import { Link } from 'react-router-dom';
 import BackgroundBeams from '../shared/components/ui/BackgroundBeams';
+import { usePerformanceMode } from '../lib/usePerformanceMode';
 
 const stats = [
     { number: '5', label: 'Projects Delivered' },
@@ -14,6 +15,9 @@ const stats = [
 ];
 
 export default function ProjectsPage() {
+    const { reducedMotion, lowPower } = usePerformanceMode();
+    const animationsEnabled = !reducedMotion && !lowPower;
+
     return (
         <div className="relative min-h-screen bg-slate-50 dark:bg-[#0a0e27] text-slate-900 dark:text-slate-100 overflow-x-hidden transition-colors duration-300">
             <Helmet>
@@ -30,37 +34,41 @@ export default function ProjectsPage() {
             </div>
 
             {/* Scroll Progress Indicator */}
-            <motion.div
-                className="fixed top-0 left-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 z-50"
-                style={{ width: '100%', scaleX: 0, transformOrigin: 'left' }}
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 1.2, ease: 'easeInOut' }}
-            />
+            {animationsEnabled && (
+                <motion.div
+                    className="fixed top-0 left-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 z-50"
+                    style={{ width: '100%', scaleX: 0, transformOrigin: 'left' }}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 1.2, ease: 'easeInOut' }}
+                />
+            )}
 
             <main className="container max-w-[1400px] mx-auto px-4 relative z-10">
                 {/* Hero/Header */}
                 <header className="pt-24 pb-10 text-center relative overflow-hidden">
                     {/* Background Beams inside the hero container */}
-                    <div className="absolute inset-0 z-0 opacity-40">
-                        <BackgroundBeams className="text-indigo-500/20" />
-                    </div>
+                    {animationsEnabled && (
+                        <div className="absolute inset-0 z-0 opacity-40">
+                            <BackgroundBeams className="text-indigo-500/20" />
+                        </div>
+                    )}
 
                     <div className="relative z-10">
                         <motion.h1
                             className="font-display text-4xl md:text-6xl font-extrabold bg-gradient-to-tr from-indigo-600 to-purple-600 dark:from-slate-100 dark:to-indigo-300 bg-clip-text text-transparent mb-4 tracking-tight"
-                            initial={{ opacity: 0, y: -30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1 }}
+                            initial={animationsEnabled ? { opacity: 0, y: -30 } : false}
+                            animate={animationsEnabled ? { opacity: 1, y: 0 } : false}
+                            transition={animationsEnabled ? { duration: 1 } : undefined}
                         >
                             Project Portfolio
                         </motion.h1>
                         <div className="divider w-20 h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent mx-auto my-6 animate-pulse rounded-full" />
                         <motion.p
                             className="subtitle text-lg text-slate-600 dark:text-slate-400 font-light"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1, delay: 0.2 }}
+                            initial={animationsEnabled ? { opacity: 0, y: 20 } : false}
+                            animate={animationsEnabled ? { opacity: 1, y: 0 } : false}
+                            transition={animationsEnabled ? { duration: 1, delay: 0.2 } : undefined}
                         >
                             Full-Stack Development • Healthcare • Microservices • Cloud Solutions
                         </motion.p>
@@ -73,10 +81,10 @@ export default function ProjectsPage() {
                         <motion.div
                             className="stat-card bg-white dark:bg-gradient-to-br dark:from-[#151934] dark:to-[#1a1f3a] p-8 rounded-xl border border-slate-200 dark:border-white/5 text-center relative overflow-hidden shadow-lg dark:shadow-none transition-all duration-300"
                             key={stat.label}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.7, delay: 0.2 + i * 0.1 }}
+                            initial={animationsEnabled ? { opacity: 0, y: 30 } : false}
+                            whileInView={animationsEnabled ? { opacity: 1, y: 0 } : undefined}
+                            viewport={animationsEnabled ? { once: true } : undefined}
+                            transition={animationsEnabled ? { duration: 0.7, delay: 0.2 + i * 0.1 } : undefined}
                         >
                             <div className="stat-number text-3xl font-bold text-indigo-600 dark:text-indigo-300 mb-2">{stat.number}</div>
                             <div className="stat-label text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">{stat.label}</div>
@@ -90,10 +98,10 @@ export default function ProjectsPage() {
                         <motion.article
                             className="project-card bg-white dark:bg-[#151934] rounded-2xl border border-slate-200 dark:border-white/5 overflow-hidden shadow-lg hover:shadow-xl dark:shadow-none hover:-translate-y-2 transition-all duration-300 relative flex flex-col group"
                             key={project.id}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.7, delay: 0.1 + idx * 0.1 }}
+                            initial={animationsEnabled ? { opacity: 0, y: 50 } : false}
+                            whileInView={animationsEnabled ? { opacity: 1, y: 0 } : undefined}
+                            viewport={animationsEnabled ? { once: true } : undefined}
+                            transition={animationsEnabled ? { duration: 0.7, delay: 0.1 + idx * 0.1 } : undefined}
                         >
                             <Link to={`/projects/${project.id}`} className="flex flex-col flex-1 h-full">
                                 <div className="project-header p-8 bg-slate-50 dark:bg-gradient-to-br dark:from-[#1a1f3a] dark:to-[#151934] relative overflow-hidden border-b border-slate-100 dark:border-white/5">

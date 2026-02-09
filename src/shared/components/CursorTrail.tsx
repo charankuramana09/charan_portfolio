@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
+import { usePerformanceMode } from '../../lib/usePerformanceMode';
 
 export default function CursorTrail() {
     const [isDesktop, setIsDesktop] = useState(false);
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
+    const { reducedMotion, lowPower } = usePerformanceMode();
 
     // Smooth movement settings
     const springConfig = { damping: 20, stiffness: 200, mass: 0.5 };
@@ -35,7 +37,7 @@ export default function CursorTrail() {
         };
     }, [isDesktop, mouseX, mouseY]);
 
-    if (!isDesktop) return null;
+    if (!isDesktop || reducedMotion || lowPower) return null;
 
     return (
         <>

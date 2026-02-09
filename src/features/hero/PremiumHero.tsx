@@ -5,7 +5,7 @@ import { FileText, ArrowRight } from 'lucide-react';
 import { hero } from '../../data/portfolio';
 import { strings } from '../../data/strings';
 import { config } from '../../data/config';
-import charanAvatar from '../../assets/charan.png';
+import charanAvatar from '../../assets/charan.webp';
 import HeroSocials from './components/HeroSocials';
 
 const container = {

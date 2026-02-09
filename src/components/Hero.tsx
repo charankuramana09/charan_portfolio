@@ -4,7 +4,7 @@ import { hero } from '../data/portfolio'
 import { sectionVariant, item, hover, maskReveal, svgDraw, blurFocus, parallaxVariant, staggerForLength, morphShape } from '../motion/variants'
 import BackgroundGradient from '../shared/components/ui/background-gradient'
 import StarfieldBackground from '../shared/components/StarfieldBackground';
-import charanAvatar from '../assets/charan.png';
+import charanAvatar from '../assets/charan.webp';
 
 export default function Hero() {
     const { scrollY } = useScroll()

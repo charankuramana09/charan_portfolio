@@ -75,16 +75,16 @@ export default function Testimonials() {
                 </div>
 
                 <div className="max-w-4xl mx-auto relative group">
-                    <div className="overflow-hidden px-4 py-12">
+                    <div className="overflow-hidden px-2 sm:px-4 py-10 sm:py-12">
                         <motion.div
-                            className="flex gap-8"
+                            className="flex w-full"
                             animate={{ x: `-${index * 100}%` }}
                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         >
                             {testimonials.map((t, idx) => (
-                                <div key={idx} className="min-w-full">
+                                <div key={idx} className="flex-[0_0_100%] px-2 sm:px-4">
                                     <motion.div
-                                        className="bg-white dark:bg-slate-900/60 p-8 md:p-12 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-2xl dark:shadow-none hover:border-indigo-500/50 transition-colors duration-500 relative overflow-hidden"
+                                        className="bg-white dark:bg-slate-900/60 p-6 sm:p-8 md:p-12 rounded-3xl sm:rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-2xl dark:shadow-none hover:border-indigo-500/50 transition-colors duration-500 relative overflow-hidden"
                                     >
                                         <div className="absolute top-0 right-0 p-8 opacity-10">
                                             <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" /></svg>
@@ -96,17 +96,17 @@ export default function Testimonials() {
                                             ))}
                                         </div>
 
-                                        <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 mb-10 leading-relaxed font-medium italic">
+                                        <p className="text-lg sm:text-xl md:text-2xl text-slate-700 dark:text-slate-300 mb-8 sm:mb-10 leading-relaxed font-medium italic">
                                             "{t.content}"
                                         </p>
 
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-16 h-16 rounded-2xl border-2 border-indigo-500/20 overflow-hidden transform rotate-3 group-hover:rotate-0 transition-transform duration-500">
+                                        <div className="flex items-center gap-4 sm:gap-5">
+                                            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border-2 border-indigo-500/20 overflow-hidden transform rotate-3 group-hover:rotate-0 transition-transform duration-500 flex-shrink-0">
                                                 <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
                                             </div>
                                             <div>
-                                                <div className="font-bold text-xl text-slate-900 dark:text-white">{t.name}</div>
-                                                <div className="text-sm text-indigo-500 dark:text-indigo-400 font-semibold tracking-wide uppercase">{t.role}</div>
+                                                <div className="font-bold text-lg sm:text-xl text-slate-900 dark:text-white">{t.name}</div>
+                                                <div className="text-xs sm:text-sm text-indigo-500 dark:text-indigo-400 font-semibold tracking-wide uppercase">{t.role}</div>
                                             </div>
                                         </div>
                                     </motion.div>

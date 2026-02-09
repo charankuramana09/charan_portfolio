@@ -100,7 +100,7 @@ export default function Blog() {
             {/* 1. HERO SECTION */}
             <div className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
                 {/* Floating Paths Background */}
-                <BackgroundPaths className="text-slate-200 dark:text-slate-800/50" />
+                <BackgroundPaths className="text-teal-200/70 dark:text-cyan-500/20" />
 
                 <div className="relative max-w-7xl mx-auto text-center z-10">
                     <motion.div

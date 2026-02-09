@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import charanAvatar from '../../../assets/charan.png';
+import charanAvatar from '../../../assets/charan.webp';
 import { strings } from '../../../data/strings';
 
 const TiltCard = () => {

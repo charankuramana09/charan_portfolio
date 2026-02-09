@@ -7,7 +7,7 @@ export const config = {
         naukri: "https://www.naukri.com/mnjuser/homepage",
     },
     contact: {
-        email: "kura.radha.krishna@gmail.com",
+        email: "charank.fullstackdeveloper@gmail.com",
         phone: "+91 7306263884",
     },
     resumeUrl: "/resume.pdf",
