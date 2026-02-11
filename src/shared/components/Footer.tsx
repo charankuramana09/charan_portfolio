@@ -137,10 +137,9 @@ const Footer: React.FC = () => {
                     <p>
                         © {year} {strings.hero.name} — Built with <span className="text-indigo-500 dark:text-indigo-400 font-semibold">React, Vite &amp; Tailwind</span>
                     </p>
-                    <nav className="flex gap-6" aria-label="Footer Legal Links">
-                        <a href="#privacy" className="relative text-slate-500 hover:text-indigo-600 dark:hover:text-white transition-all duration-300 focus-ring rounded px-1">Privacy</a>
-                        <a href="#terms" className="relative text-slate-500 hover:text-indigo-600 dark:hover:text-white transition-all duration-300 focus-ring rounded px-1">Terms</a>
-                    </nav>
+                    <p className="text-slate-400 text-xs">
+                        Designed & developed by {strings.hero.name}
+                    </p>
                 </motion.div>
             </div>
         </footer>

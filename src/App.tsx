@@ -34,7 +34,7 @@ export default function App() {
 
     // Performance Monitoring
     React.useEffect(() => {
-        if ('connection' in navigator && (navigator as any).connection.saveData) {
+        if ('connection' in navigator && (navigator as any).connection?.saveData) {
             console.log('Low power mode / Save data enabled. Reducing animations.');
         }
     }, []);

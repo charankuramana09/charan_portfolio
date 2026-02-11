@@ -18,9 +18,9 @@ const Contact: React.FC = () => {
                 viewport={{ once: true }}
                 className="text-center mb-20"
             >
-                <h1 id="contact-heading" className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 dark:from-white dark:via-indigo-400 dark:to-purple-500 bg-clip-text text-transparent mb-4">
+                <h2 id="contact-heading" className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 dark:from-white dark:via-indigo-400 dark:to-purple-500 bg-clip-text text-transparent mb-4">
                     {strings.contact.title}
-                </h1>
+                </h2>
                 <p className="text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
                     {strings.contact.subtitle}
                 </p>

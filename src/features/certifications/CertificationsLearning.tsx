@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, Calendar, BookOpen, ExternalLink, TrendingUp, Code, Server, Coffee, Trophy, Star } from 'lucide-react';
+import { BookOpen, ExternalLink, TrendingUp, Server, Coffee, Trophy, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { Ripple } from '../../shared/components/ui/Ripple';
@@ -100,7 +100,8 @@ const CertificationsLearning = () => {
 
                                 <motion.div
                                     className="relative h-full bg-white/95 dark:bg-slate-900/80 rounded-[22px] p-8 flex flex-col overflow-hidden"
-                                    animate={{ y: [0, -6, 0] }}
+                                    whileInView={{ y: [0, -6, 0] }}
+                                    viewport={{ once: false, amount: 0.3 }}
                                     transition={{ duration: 6 + index, repeat: Infinity, ease: 'easeInOut' }}
                                 >
                                     {/* Top Decor */}
@@ -175,26 +176,5 @@ const CertificationsLearning = () => {
         </section>
     );
 };
-
-// Extracted from Lucide since we can't import ArrowRight in the same import statement if it wasn't there
-function ArrowRight({ size = 24, className = "" }) {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={size}
-            height={size}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={className}
-        >
-            <path d="M5 12h14"></path>
-            <path d="m12 5 7 7-7 7"></path>
-        </svg>
-    );
-}
 
 export default CertificationsLearning;

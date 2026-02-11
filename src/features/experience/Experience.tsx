@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import React from 'react';
+import { motion, useTransform, useMotionValue } from 'framer-motion';
 import { Briefcase, Code, Settings, Calendar, MapPin, ArrowRight } from 'lucide-react';
 import { experience } from '../../data/portfolio';
 import { Link } from 'react-router-dom';
