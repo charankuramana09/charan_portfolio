@@ -74,7 +74,17 @@ export default function Testimonials() {
                     </motion.h2>
                 </div>
 
-                <div className="max-w-4xl mx-auto relative group">
+                <div
+                    className="max-w-4xl mx-auto relative group"
+                    role="region"
+                    aria-label="Testimonials carousel"
+                    aria-roledescription="carousel"
+                    onKeyDown={(e) => {
+                        if (e.key === 'ArrowLeft') setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+                        if (e.key === 'ArrowRight') setIndex((prev) => (prev + 1) % testimonials.length);
+                    }}
+                    tabIndex={0}
+                >
                     <div className="overflow-hidden px-2 sm:px-4 py-10 sm:py-12">
                         <motion.div
                             className="flex w-full"
@@ -102,7 +112,7 @@ export default function Testimonials() {
 
                                         <div className="flex items-center gap-4 sm:gap-5">
                                             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border-2 border-indigo-500/20 overflow-hidden transform rotate-3 group-hover:rotate-0 transition-transform duration-500 flex-shrink-0">
-                                                <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
+                                                <img src={t.avatar} alt={t.name} width={64} height={64} loading="lazy" className="w-full h-full object-cover" />
                                             </div>
                                             <div>
                                                 <div className="font-bold text-lg sm:text-xl text-slate-900 dark:text-white">{t.name}</div>

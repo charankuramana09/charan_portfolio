@@ -1,27 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ExternalLink, Github, Eye, Star, Code, Zap, Database, Cloud, Sparkles } from 'lucide-react';
 import { projects as portfolioProjects } from '../../data/portfolio';
 
 const EnhancedProjects = () => {
     const [hoveredCard, setHoveredCard] = useState<number | null>(null);
     const [starredProjects, setStarredProjects] = useState<{ [key: number]: boolean }>({});
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
-
-    // Merge portfolio data with UI metadata (icons, gradients, etc.)
-    const iconMap: { [key: string]: any } = {
-        'Database': Database,
-        'Cloud': Cloud,
-        'Zap': Zap,
-        'Code': Code
-    };
 
     const gradientMap: { [key: number]: string } = {
         0: 'from-purple-500 to-indigo-600',
@@ -55,7 +38,7 @@ const EnhancedProjects = () => {
     const projectRows = [projects.slice(0, 2), projects.slice(2, 4)];
 
     return (
-        <div id="projects" className="min-h-screen bg-slate-50 dark:bg-slate-950 py-20 px-4 overflow-hidden relative transition-colors duration-300">
+        <section id="projects" className="min-h-screen bg-slate-50 dark:bg-slate-950 py-20 px-4 overflow-hidden relative transition-colors duration-300">
             {/* Advanced Animated Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 {/* Gradient Orbs with continuous animation */}
@@ -87,7 +70,7 @@ const EnhancedProjects = () => {
                         <div className="relative">
                             {/* Glow effect behind text */}
                             <div className="absolute inset-0 blur-2xl bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 opacity-20 dark:opacity-30 animate-pulse-slow"></div>
-                            <h2 className="relative text-6xl md:text-7xl lg:text-8xl font-black dark:text-white text-slate-900">
+                            <h2 className="relative text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black dark:text-white text-slate-900">
                                 <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 animate-gradient-x">
                                     Featured Work
                                 </span>
@@ -224,176 +207,8 @@ const EnhancedProjects = () => {
                     ))}
                 </div>
             </div>
-            {/* Animations and styles are injected inline for this section */}
-            < style > {`
-                .bg-grid-pattern {
-                    background-image: 
-                        linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
-                    background-size: 50px 50px;
-                }
-                @keyframes float {
-                    0%, 100% { transform: translate(0, 0) scale(1); }
-                    33% { transform: translate(30px, -30px) scale(1.1); }
-                    66% { transform: translate(-20px, 20px) scale(0.9); }
-                }
-                @keyframes float-delayed {
-                    0%, 100% { transform: translate(0, 0) scale(1); }
-                    33% { transform: translate(-30px, 30px) scale(1.1); }
-                    66% { transform: translate(20px, -20px) scale(0.9); }
-                }
-                @keyframes float-slow {
-                    0%, 100% { transform: translate(0, 0) scale(1); }
-                    50% { transform: translate(15px, 15px) scale(1.05); }
-                }
-                .animate-float {
-                    animation: float 20s ease-in-out infinite;
-                }
-                .animate-float-delayed {
-                    animation: float-delayed 25s ease-in-out infinite;
-                }
-                .animate-float-slow {
-                    animation: float-slow 30s ease-in-out infinite;
-                }
-                @keyframes gradient-x {
-                    0%, 100% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                }
-                @keyframes gradient-xy {
-                    0%, 100% { background-position: 0% 0%; }
-                    25% { background-position: 100% 0%; }
-                    50% { background-position: 100% 100%; }
-                    75% { background-position: 0% 100%; }
-                }
-                @keyframes gradient-shift {
-                    0%, 100% { opacity: 0.1; }
-                    50% { opacity: 0.2; }
-                }
-                .animate-gradient-x {
-                    background-size: 200% 200%;
-                    animation: gradient-x 3s ease infinite;
-                }
-                .animate-gradient-xy {
-                    background-size: 200% 200%;
-                    animation: gradient-xy 6s ease infinite;
-                }
-                .animate-gradient-shift {
-                    animation: gradient-shift 10s ease-in-out infinite;
-                }
-                @keyframes shimmer {
-                    0% { transform: translateX(-100%); }
-                    100% { transform: translateX(100%); }
-                }
-                .animate-shimmer {
-                    animation: shimmer 2s ease-in-out infinite;
-                }
-                @keyframes particle {
-                    0%, 100% { 
-                        transform: translate(0, 0) scale(0);
-                        opacity: 0;
-                    }
-                    10% {
-                        opacity: 1;
-                        transform: translate(0, 0) scale(1);
-                    }
-                    90% {
-                        opacity: 1;
-                    }
-                    100% { 
-                        transform: translate(var(--tx, 100px), var(--ty, -100px)) scale(0);
-                        opacity: 0;
-                    }
-                }
-                .animate-particle {
-                    --tx: ${Math.random() * 200 - 100}px;
-                    --ty: ${Math.random() * 200 - 100}px;
-                    animation: particle 15s ease-in-out infinite;
-                }
-                @keyframes scan {
-                    0% { transform: translateY(-100%); }
-                    100% { transform: translateY(400%); }
-                }
-                .animate-scan {
-                    animation: scan 3s ease-in-out infinite;
-                }
-                @keyframes spin-slow {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
-                }
-                @keyframes spin-slow-reverse {
-                    from { transform: rotate(360deg); }
-                    to { transform: rotate(0deg); }
-                }
-                .animate-spin-slow {
-                    animation: spin-slow 8s linear infinite;
-                }
-                .animate-spin-slow-reverse {
-                    animation: spin-slow-reverse 8s linear infinite;
-                }
-                @keyframes text-shine {
-                    0%, 100% { opacity: 1; filter: brightness(1); }
-                    50% { opacity: 1; filter: brightness(1.3); }
-                }
-                .animate-text-shine {
-                    animation: text-shine 2s ease-in-out infinite;
-                }
-                .animate-text-shine-delayed {
-                    animation: text-shine 2s ease-in-out 0.5s infinite;
-                }
-                @keyframes border-glow {
-                    0%, 100% { opacity: 0.2; }
-                    50% { opacity: 0.5; }
-                }
-                .animate-border-glow {
-                    animation: border-glow 3s ease-in-out infinite;
-                }
-                .animate-border-glow-delayed {
-                    animation: border-glow 3s ease-in-out 1s infinite;
-                }
-                @keyframes icon-float {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-3px); }
-                }
-                .animate-icon-float {
-                    animation: icon-float 2s ease-in-out infinite;
-                }
-                @keyframes pulse-slow {
-                    0%, 100% { opacity: 0.3; }
-                    50% { opacity: 0.5; }
-                }
-                .animate-pulse-slow {
-                    animation: pulse-slow 4s ease-in-out infinite;
-                }
-                @keyframes bounce-subtle {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-2px); }
-                }
-                .animate-bounce-subtle {
-                    animation: bounce-subtle 1s ease-in-out infinite;
-                }
-                @keyframes slideUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(50px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-                @keyframes tagFloat {
-                    0% {
-                        transform: translateY(0);
-                    }
-                    50% {
-                        transform: translateY(-6px);
-                    }
-                    100% {
-                        transform: translateY(0);
-                    }
-                }
-            `}</style >
-        </div >
+            {/* Animations moved to src/styles/index.css for performance */}
+        </section >
     );
 };
 

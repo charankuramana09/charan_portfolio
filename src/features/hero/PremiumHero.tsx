@@ -132,8 +132,11 @@ export default function PremiumHero(): JSX.Element {
                     <img
                       src={charanAvatar}
                       alt={strings.hero.name}
+                      width={256}
+                      height={256}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      loading="lazy"
+                      loading="eager"
+                      fetchPriority="high"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(strings.hero.name)}&background=6366f1&color=fff&size=256`;
                       }}
@@ -151,7 +154,7 @@ export default function PremiumHero(): JSX.Element {
 
                 {/* Floating badges */}
                 <motion.div
-                  className="absolute -right-4 top-10 bg-white/80 dark:bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 shadow-lg text-xs text-slate-800 dark:text-white font-medium flex items-center gap-2"
+                  className="absolute right-0 md:-right-4 top-10 bg-white/80 dark:bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 shadow-lg text-xs text-slate-800 dark:text-white font-medium flex items-center gap-2"
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 >
@@ -159,7 +162,7 @@ export default function PremiumHero(): JSX.Element {
                 </motion.div>
 
                 <motion.div
-                  className="absolute -left-8 bottom-20 bg-white/80 dark:bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 shadow-lg text-xs text-slate-800 dark:text-white font-medium flex items-center gap-2"
+                  className="absolute left-0 md:-left-8 bottom-20 bg-white/80 dark:bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 shadow-lg text-xs text-slate-800 dark:text-white font-medium flex items-center gap-2"
                   animate={{ y: [0, 10, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 >
