@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiClock, FiCalendar, FiShare2, FiBookmark, FiTag, FiMessageSquare } from 'react-icons/fi';
+import { FiArrowLeft, FiClock, FiCalendar, FiShare2, FiBookmark, FiTag, FiMessageSquare, FiLinkedin, FiArrowUpRight } from 'react-icons/fi';
 import { blogPosts } from '../data/portfolio';
+import { config } from '../data/config';
 import { Helmet } from 'react-helmet-async';
 
 export default function BlogPost() {
@@ -36,7 +37,7 @@ export default function BlogPost() {
                 <meta property="og:title" content={post.title} />
                 <meta property="og:description" content={post.summary} />
                 <meta property="og:image" content={post.image} />
-                <meta property="og:url" content={`https://charankuramana.me/blog/${post.slug}`} />
+                <meta property="og:url" content={`${config.siteUrl}/blog/${post.slug}`} />
             </Helmet>
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,9 +96,15 @@ export default function BlogPost() {
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <button className="p-3 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-500" aria-label="Share">
-                                <FiShare2 size={20} />
-                            </button>
+                            <a
+                                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${config.siteUrl}/blog/${post.slug}`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 rounded-full bg-[#0a66c2] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0958a8]"
+                                aria-label="Share on LinkedIn"
+                            >
+                                <FiLinkedin size={18} /> Share
+                            </a>
                             <button className="p-3 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-500" aria-label="Bookmark">
                                 <FiBookmark size={20} />
                             </button>
@@ -130,6 +137,27 @@ export default function BlogPost() {
                     {/* Simulating markdown rendering for demo */}
                     <div dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br/>') }} />
                 </motion.div>
+
+                {/* LinkedIn CTA */}
+                <div className="mb-16 flex flex-col items-center justify-between gap-4 rounded-3xl border border-[#0a66c2]/20 bg-[#0a66c2]/5 p-6 sm:flex-row sm:p-8">
+                    <div className="flex items-center gap-4">
+                        <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-2xl bg-[#0a66c2] text-white">
+                            <FiLinkedin size={24} />
+                        </span>
+                        <div>
+                            <h3 className="font-bold text-slate-900 dark:text-white">Enjoyed this? I post more on LinkedIn</h3>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">Quick posters, build logs and dev tips — several times a week.</p>
+                        </div>
+                    </div>
+                    <a
+                        href={config.social.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex flex-shrink-0 items-center gap-2 rounded-xl bg-[#0a66c2] px-5 py-2.5 font-semibold text-white transition-colors hover:bg-[#0958a8]"
+                    >
+                        Follow <FiArrowUpRight className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </a>
+                </div>
 
                 {/* Tags & Interaction */}
                 <footer className="pt-12 border-t border-slate-200 dark:border-slate-800">

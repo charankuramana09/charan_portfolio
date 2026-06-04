@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://charankuramana.me/sitemap.xml
+Sitemap: https://charankuramana09.github.io/charan_portfolio/sitemap.xml

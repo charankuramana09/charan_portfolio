@@ -1,243 +1,114 @@
-import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
-import {
-    Database,
-    Server,
-    Layout,
-    Cpu,
-    Cloud,
-    Zap,
-    CheckCircle2
-} from 'lucide-react';
-import { strings } from '../../data/strings';
-import SkillCard from './components/SkillCard';
-import SkillMatrix from './components/SkillMatrix';
-import CosmicWavesBackdrop from '../../shared/components/ui/CosmicWavesBackdrop';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Code2, Server, Database, Cloud } from 'lucide-react';
+import Section, { SectionHeading } from '../../shared/ui/Section';
+import RadialProgress from '../../shared/ui/RadialProgress';
+import Marquee from '../../shared/ui/Marquee';
+import { skillGroups, techMarquee, type SkillGroup } from '../../data/profile';
 
-const LIVE_SKILLS = [
-    'React', 'TypeScript', 'Angular', 'Tailwind CSS', 'HTML', 'CSS', 'JavaScript',
-    'Java', 'Spring Boot', 'Microservices', 'REST APIs', 'JWT Authentication', '.NET (C#)',
-    'MySQL', 'Oracle', 'Cosmos DB',
-    'Git & GitHub', 'Docker', 'Kubernetes', 'CI/CD Pipelines', 'Zoho Creator', 'Agile / Scrum',
-];
-
-const COLORS = [
-    '#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#f97316', '#a3e635',
-    '#0ea5e9', '#f43f5e', '#facc15', '#14b8a6', '#eab308', '#22d3ee', '#f472b6', '#a21caf',
-];
+const iconMap: Record<SkillGroup['icon'], React.ReactNode> = {
+  code: <Code2 size={18} />,
+  server: <Server size={18} />,
+  database: <Database size={18} />,
+  cloud: <Cloud size={18} />,
+};
 
 const Skills: React.FC = () => {
-    const liveData = useMemo(() => {
-        const highlighted = Array.from(new Set(LIVE_SKILLS)).slice(0, 10);
-        return highlighted.map((s, i) => ({ label: s, color: COLORS[i % COLORS.length] }));
-    }, []);
+  const [active, setActive] = useState(0);
+  const group = skillGroups[active];
 
-    const skillCategories = [
-        {
-            title: "Frontend",
-            icon: <Layout size={24} aria-hidden="true" />,
-            color: "#6366f1",
-            skills: ['React', 'TypeScript', 'Angular', 'Tailwind CSS', 'HTML', 'CSS', 'JavaScript']
-        },
-        {
-            title: "Backend",
-            icon: <Server size={24} aria-hidden="true" />,
-            color: "#10b981",
-            skills: ['Java', 'Spring Boot', 'Microservices', 'REST APIs', 'JWT Authentication', '.NET (C#)']
-        },
-        {
-            title: "Database",
-            icon: <Database size={24} aria-hidden="true" />,
-            color: "#f59e0b",
-            skills: ['MySQL', 'Oracle', 'Cosmos DB', 'PostgreSQL', 'Redis']
-        },
-        {
-            title: "DevOps",
-            icon: <Cloud size={24} aria-hidden="true" />,
-            color: "#a855f7",
-            skills: ['Git & GitHub', 'Docker', 'Kubernetes', 'CI/CD Pipelines', 'Agile / Scrum']
-        },
-        {
-            title: "Platform",
-            icon: <Cpu size={24} aria-hidden="true" />,
-            color: "#ef4444",
-            skills: ['Zoho Creator', 'Deluge Script', 'API Integration', 'Workflows', 'Portal Dev']
-        }
-    ];
+  return (
+    <Section id="skills" aria-label="Technical skills">
+      <SectionHeading
+        eyebrow="Skills"
+        title="Technical"
+        highlight="Excellence"
+        subtitle="A comprehensive ecosystem of tools and technologies I use to bring complex ideas to life."
+      />
 
-    return (
-        <section id="skills" className="py-24 relative bg-white dark:bg-slate-950 overflow-hidden transition-colors duration-300">
-            {/* Background Decorations */}
-            <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden opacity-20" aria-hidden="true">
-                <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-indigo-500/20 blur-[120px] rounded-full animate-pulse" />
-                <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-emerald-500/20 blur-[120px] rounded-full animate-pulse-slow" />
-            </div>
+      {/* segmented category switcher */}
+      <div className="mt-12 flex justify-center">
+        <div
+          role="tablist"
+          aria-label="Skill categories"
+          className="flex flex-wrap justify-center gap-1 rounded-2xl border border-slate-200 bg-white/60 p-1.5 backdrop-blur-md dark:border-white/10 dark:bg-white/5"
+        >
+          {skillGroups.map((g, i) => {
+            const isActive = i === active;
+            return (
+              <button
+                key={g.title}
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActive(i)}
+                className={`focus-ring relative flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors ${
+                  isActive ? 'text-white' : 'text-slate-600 hover:text-brand-600 dark:text-slate-300'
+                }`}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="skill-tab-pill"
+                    className="absolute inset-0 -z-10 rounded-xl bg-brand-gradient shadow-glow"
+                    transition={{ type: 'spring', bounce: 0.18, duration: 0.5 }}
+                  />
+                )}
+                <span className={isActive ? 'text-white' : 'text-brand-500'}>{iconMap[g.icon]}</span>
+                <span className="hidden sm:inline">{g.title}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-            <div className="container mx-auto px-4 relative z-10">
-                <div className="max-w-3xl mx-auto text-center mb-20">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6 tracking-tight uppercase"
-                    >
-                        {strings.skills.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-emerald-500">{strings.skills.highlight}</span>
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="text-slate-600 dark:text-slate-400 text-lg font-medium"
-                    >
-                        {strings.skills.description}
-                    </motion.p>
+      {/* radial skill cards for active group */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={group.title}
+          initial="hidden"
+          animate="show"
+          exit={{ opacity: 0, y: 10, transition: { duration: 0.2 } }}
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
+          className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3"
+        >
+          {group.skills.map((s) => (
+            <motion.div
+              key={s.name}
+              variants={{
+                hidden: { opacity: 0, y: 24, scale: 0.96 },
+                show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+              }}
+              whileHover={{ y: -6 }}
+              className="glass-card tile-spotlight flex flex-col items-center p-6 text-center"
+            >
+              <RadialProgress value={s.pct} size={104} stroke={8}>
+                <div>
+                  <div className="text-xl font-bold text-slate-900 dark:text-white">{s.pct}%</div>
                 </div>
+              </RadialProgress>
+              <h3 className="mt-4 font-semibold text-slate-900 dark:text-white">{s.name}</h3>
+              <span className="mt-1 rounded-full border border-brand-500/20 bg-brand-500/10 px-3 py-0.5 text-[11px] font-medium text-brand-600 dark:text-brand-300">
+                {s.level}
+              </span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
 
-                {/* Live Skills */}
-                <div className="mb-20">
-                    <div className="flex flex-center justify-center items-center gap-2 mb-8">
-                        <Zap size={16} className="text-yellow-400 animate-pulse" aria-hidden="true" />
-                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Live Skill Matrix</span>
-                    </div>
-                    <div className="max-w-4xl mx-auto">
-                        <SkillMatrix skills={liveData} />
-                    </div>
-                </div>
-
-                {/* Main Skill Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 auto-rows-fr items-stretch mb-24" role="list">
-                    {skillCategories.map((cat, idx) => (
-                        <div key={cat.title} role="listitem" className="min-w-0 h-full">
-                            <SkillCard
-                                title={cat.title}
-                                icon={cat.icon}
-                                iconColor={cat.color}
-                                skills={cat.skills}
-                                delay={idx * 0.1}
-                                enterFrom={idx === 4 ? 'bottom' : idx % 2 === 0 ? 'left' : 'right'}
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                {/* Core Proficiencies */}
-                <section className="proficiencies-section mt-10 w-full relative left-0 right-0 mx-0 sm:w-screen sm:left-1/2 sm:right-1/2 sm:-mx-[50vw]" aria-label={strings.skills.proficiencies}>
-                    <div className="animated-background" aria-hidden="true">
-                        <div className="wave-container">
-                            <div className="wave" />
-                            <div className="wave" />
-                            <div className="wave" />
-                        </div>
-
-                        <div className="blob blob-1" />
-                        <div className="blob blob-2" />
-                        <div className="blob blob-3" />
-
-                        <div className="hexagon-pattern">
-                            {Array.from({ length: 12 }).map((_, i) => (
-                                <div
-                                    key={`hex-${i}`}
-                                    className="hexagon"
-                                    style={{
-                                        left: `${(i * 8 + 5) % 100}%`,
-                                        top: `${(i * 13 + 7) % 100}%`,
-                                        animationDelay: `${(i % 6) * 0.6}s`,
-                                    }}
-                                />
-                            ))}
-                        </div>
-
-                        <div className="cube-container">
-                            {Array.from({ length: 8 }).map((_, i) => (
-                                <div
-                                    key={`cube-${i}`}
-                                    className="cube"
-                                    style={{
-                                        left: `${(i * 11 + 12) % 100}%`,
-                                        top: `${(i * 17 + 8) % 100}%`,
-                                        animationDelay: `${(i % 5) * 1.2}s`,
-                                        animationDuration: `${18 + (i % 5) * 2}s`,
-                                    }}
-                                >
-                                    {['front', 'back', 'right', 'left', 'top', 'bottom'].map((face) => (
-                                        <div key={face} className={`cube-face cube-face-${face}`} />
-                                    ))}
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="ring-container">
-                            {Array.from({ length: 4 }).map((_, i) => (
-                                <div
-                                    key={`ring-${i}`}
-                                    className="ring"
-                                    style={{
-                                        left: `${(i * 23 + 10) % 100}%`,
-                                        top: `${(i * 19 + 15) % 100}%`,
-                                        animationDelay: `${i * 1.8}s`,
-                                    }}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="content-container">
-                        <div className="header">
-                            <div className="check-icon" aria-hidden="true" />
-                            <h3 className="proficiencies-title">
-                                <span className="proficiencies-title-text">{strings.skills.proficiencies}</span>
-                            </h3>
-                            <div className="title-underline" aria-hidden="true" />
-                        </div>
-
-                        <div className="skills-grid">
-                            {[
-                                { name: 'Java & Spring Boot', level: 90 },
-                                { name: 'React & TypeScript', level: 85 },
-                                { name: 'Microservices Architecture', level: 80 },
-                                { name: 'Database Management', level: 85 },
-                                { name: 'DevOps & CI/CD', level: 75 },
-                                { name: 'Zoho Creator Platform', level: 95 },
-                            ].map((stat, idx) => (
-                                <div
-                                    key={stat.name}
-                                    className="skill-card"
-                                    role="progressbar"
-                                    aria-valuenow={stat.level}
-                                    aria-valuemin={0}
-                                    aria-valuemax={100}
-                                    aria-label={`${stat.name} proficiency`}
-                                    onMouseMove={(e) => {
-                                        const rect = e.currentTarget.getBoundingClientRect();
-                                        const x = ((e.clientX - rect.left) / rect.width) * 100;
-                                        const y = ((e.clientY - rect.top) / rect.height) * 100;
-                                        e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
-                                        e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.removeProperty('--mouse-x');
-                                        e.currentTarget.style.removeProperty('--mouse-y');
-                                    }}
-                                >
-                                    <div className="skill-header">
-                                        <div className="skill-title">
-                                            <div className="skill-name">{stat.name}</div>
-                                            <div className="skill-percentage">{stat.level}%</div>
-                                        </div>
-                                        <div className="skill-icon" aria-hidden="true" />
-                                    </div>
-                                    <div className="progress-container">
-                                        <div className="progress-bar" style={{ width: `${stat.level}%` }} />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </section>
-    );
+      {/* full tech marquee */}
+      <div className="mt-14">
+        <Marquee speed={32}>
+          {techMarquee.map((t, i) => (
+            <span
+              key={`${t}-${i}`}
+              className="mx-1 shrink-0 rounded-full border border-slate-200 bg-white/50 px-4 py-1.5 text-sm font-medium text-slate-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-300"
+            >
+              {t}
+            </span>
+          ))}
+        </Marquee>
+      </div>
+    </Section>
+  );
 };
 
 export default React.memo(Skills);

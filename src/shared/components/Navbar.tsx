@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Sun, Moon, Menu, X } from 'lucide-react';
+import { Sun, Moon, Menu, X, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { strings } from '../../data/strings';
+import { openCommandPalette } from '../ui/CommandPalette';
 
 const Navbar: React.FC = () => {
     const [theme, setTheme] = useState<'light' | 'dark'>(() => {
         const saved = localStorage.getItem('theme');
-        if (saved) return saved as 'light' | 'dark';
-        return 'dark';
+        if (saved === 'light' || saved === 'dark') return saved;
+        return 'light';
     });
     const [mobileOpen, setMobileOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
@@ -21,8 +22,8 @@ const Navbar: React.FC = () => {
             { label: strings.navigation.home, href: '#home' },
             { label: strings.navigation.about, href: '#about' },
             { label: strings.navigation.skills, href: '#skills' },
+            { label: strings.navigation.services, href: '#services' },
             { label: strings.navigation.experience, href: '#experience' },
-            { label: strings.navigation.certifications, href: '#certifications' },
             { label: strings.navigation.contact, href: '#contact' },
         ],
         pages: [
@@ -155,9 +156,18 @@ const Navbar: React.FC = () => {
                     </div>
 
                     <button
+                        onClick={openCommandPalette}
+                        aria-label="Open command menu"
+                        className="ml-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100/70 px-3 py-2 text-sm text-slate-500 transition-colors hover:text-brand-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-400 focus-ring"
+                    >
+                        <Search size={15} />
+                        <kbd className="rounded bg-white px-1.5 text-[10px] font-semibold text-slate-400 dark:bg-white/10">⌘K</kbd>
+                    </button>
+
+                    <button
                         aria-label={theme === 'dark' ? "Switch to light theme" : "Switch to dark theme"}
                         onClick={toggleTheme}
-                        className="ml-4 p-2.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white hover:scale-110 active:scale-95 transition-all shadow-sm border border-slate-200 dark:border-white/10 focus-ring"
+                        className="ml-2 p-2.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white hover:scale-110 active:scale-95 transition-all shadow-sm border border-slate-200 dark:border-white/10 focus-ring"
                     >
                         {theme === 'light' ? <Moon size={20} aria-hidden="true" /> : <Sun size={20} aria-hidden="true" />}
                     </button>
@@ -165,6 +175,13 @@ const Navbar: React.FC = () => {
 
                 {/* Mobile Hamburger */}
                 <div className="flex lg:hidden items-center gap-3">
+                    <button
+                        onClick={openCommandPalette}
+                        className="p-2 rounded-full bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white focus-ring"
+                        aria-label="Open command menu"
+                    >
+                        <Search size={20} aria-hidden="true" />
+                    </button>
                     <button
                         onClick={toggleTheme}
                         className="p-2 rounded-full bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white focus-ring"

@@ -1,147 +1,157 @@
-import React, { useMemo } from 'react';
-import Section from '../../shared/components/Section';
+import React from 'react';
+import { MapPin, Mail, Briefcase, Download, Coffee, Zap, Heart, Linkedin, ArrowUpRight } from 'lucide-react';
+import Section, { SectionHeading } from '../../shared/ui/Section';
+import { StaggerGroup } from '../../shared/ui/Reveal';
+import { motion, type Variants } from 'framer-motion';
+import BentoTile from '../../shared/ui/BentoTile';
+import GitHubStatsCard from './components/GitHubStatsCard';
 import { about } from '../../data/portfolio';
-import { strings } from '../../data/strings';
-import { motion } from 'framer-motion';
-import { Layers, Network, Cloud, Boxes } from 'lucide-react';
-import { item, stagger } from '../../motion/variants';
-import { LightWavesBackground } from '../../shared/components/ui/LightWavesBackground';
-import TiltCard from './components/TiltCard';
-import FeaturedSkillCard from './components/FeaturedSkillCard';
+import { now } from '../../data/profile';
+import { config } from '../../data/config';
+
+const aboutItem: Variants = {
+  hidden: { opacity: 0, y: 30, filter: 'blur(8px)' },
+  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+};
+
+const values = [
+  { icon: <Zap size={18} />, label: 'Ships fast, breaks little', accent: 'from-brand-500 to-violet-500' },
+  { icon: <Heart size={18} />, label: 'User-focused engineering', accent: 'from-rose-500 to-pink-500' },
+  { icon: <Coffee size={18} />, label: 'Lifelong learner', accent: 'from-amber-500 to-orange-500' },
+];
 
 const About: React.FC = () => {
-    const featuredSkills = useMemo(() => [
-        {
-            name: 'Full Stack',
-            icon: (
-                <motion.span
-                    className="inline-flex"
-                    animate={{ y: [0, -3, 0] }}
-                    transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                    <Layers size={22} aria-hidden="true" />
-                </motion.span>
-            ),
-            color: 'from-[#6366f1] to-[#7c3aed]',
-            label: 'Java & React',
-        },
-        {
-            name: 'Microservices',
-            icon: (
-                <motion.span
-                    className="inline-flex"
-                    animate={{ rotate: [0, 6, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                    <Network size={22} aria-hidden="true" />
-                </motion.span>
-            ),
-            color: 'from-[#f472b6] to-[#be185d]',
-            label: 'API & Integration',
-        },
-        {
-            name: 'Cloud',
-            icon: (
-                <motion.span
-                    className="inline-flex"
-                    animate={{ y: [0, -2, 0], x: [0, 2, 0] }}
-                    transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                    <Cloud size={22} aria-hidden="true" />
-                </motion.span>
-            ),
-            color: 'from-[#06b6d4] to-[#0891b2]',
-            label: 'Docker & K8s',
-        },
-        {
-            name: 'Zoho Creator',
-            icon: (
-                <motion.span
-                    className="inline-flex"
-                    animate={{ scale: [1, 1.06, 1] }}
-                    transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                    <Boxes size={22} aria-hidden="true" />
-                </motion.span>
-            ),
-            color: 'from-[#10b981] to-[#059669]',
-            label: 'Low-Code Apps',
-        },
-    ], []);
+  return (
+    <Section id="about" aria-label="About Charan">
+      <SectionHeading eyebrow="About" title="A bit" highlight="about me" subtitle={about.location} />
 
-    return (
-        <Section id="about" direction="left" className="w-full py-28 sm:py-32 relative overflow-hidden transition-colors duration-300" aria-label="About Me">
-            <div className="absolute inset-0 w-full h-full" aria-hidden="true">
-                <LightWavesBackground
-                    className="w-full h-full"
-                    colors={["#6366f1", "#8b5cf6", "#06b6d4", "#a855f7", "#0ea5e9"]}
-                    speed={0.8}
-                    intensity={0.4}
-                />
+      <StaggerGroup className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-3 md:auto-rows-[minmax(0,auto)]">
+        {/* Bio */}
+        <motion.div variants={aboutItem} className="md:col-span-2">
+          <BentoTile className="h-full">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Who I am</h3>
+            <div className="mt-4 space-y-4 text-slate-600 dark:text-slate-300">
+              {about.paragraphs.map((p, i) => (
+                <p key={i} className="leading-relaxed">{p}</p>
+              ))}
             </div>
-
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-                <div className="flex flex-col lg:flex-row gap-16 items-center lg:items-start relative z-10">
-                    <div
-                        className="lg:sticky lg:top-28 flex-shrink-0 perspective-1000 focus-ring rounded-2xl"
-                        tabIndex={0}
-                        role="img"
-                        aria-label={strings.about.profileAlt}
-                    >
-                        <TiltCard />
-                        <div className="mt-8 text-center text-sm text-slate-500 dark:text-slate-500">
-                            <p className="opacity-80">Based in {about.location} 🇮🇳</p>
-                        </div>
-                    </div>
-
-                    <motion.div
-                        variants={stagger}
-                        initial={{ opacity: 0, x: 60 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, amount: 0.3 }}
-                        transition={{ duration: 0.8, ease: 'easeOut' }}
-                        className="flex-1 w-full"
-                    >
-                        <motion.div variants={item} className="mb-8">
-                            <span className="inline-block py-1 px-3 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-sm font-semibold mb-4 tracking-wide">
-                                {strings.about.title.toUpperCase()} {strings.about.subtitle.toUpperCase()}
-                            </span>
-                            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
-                                <span className="text-shimmer">Crafting Digital Experiences with Passion & Code</span>
-                            </h2>
-                        </motion.div>
-
-                        {about.paragraphs.map((p, i) => (
-                            <motion.p
-                                variants={item}
-                                key={i}
-                                className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed mb-6 border-l-2 border-indigo-500/20 pl-6 hover:border-indigo-500 transition-colors duration-300"
-                            >
-                                {p}
-                            </motion.p>
-                        ))}
-
-                        <motion.div
-                            variants={stagger}
-                            className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10"
-                            role="list"
-                            aria-label={strings.about.featuredSkills}
-                        >
-                            {featuredSkills.map((skill) => (
-                                <FeaturedSkillCard
-                                    key={skill.name}
-                                    name={skill.name}
-                                    icon={skill.icon}
-                                    color={skill.color}
-                                    label={skill.label}
-                                />
-                            ))}
-                        </motion.div>
-                    </motion.div>
-                </div>
+            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {values.map((v) => (
+                <motion.div
+                  key={v.label}
+                  whileHover={{ y: -4 }}
+                  className="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-slate-200 bg-white/60 p-3 dark:border-white/10 dark:bg-white/5"
+                >
+                  <span
+                    className={`absolute inset-0 -z-10 bg-gradient-to-br ${v.accent} opacity-0 transition-opacity duration-300 group-hover:opacity-[0.08]`}
+                  />
+                  <span className={`grid h-10 w-10 flex-shrink-0 place-items-center rounded-xl bg-gradient-to-br ${v.accent} text-white shadow-glow`}>
+                    {v.icon}
+                  </span>
+                  <span className="text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100">{v.label}</span>
+                </motion.div>
+              ))}
             </div>
-        </Section>
-    );
+          </BentoTile>
+        </motion.div>
+
+        {/* Quick facts / availability */}
+        <motion.div variants={aboutItem}>
+          <BentoTile className="flex h-full flex-col justify-between">
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Quick facts</h3>
+              <ul className="mt-4 space-y-3 text-sm">
+                <li className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+                  <MapPin size={16} className="text-brand-500" /> {about.location}
+                </li>
+                <li className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+                  <Briefcase size={16} className="text-brand-500" /> Full Stack Developer @ iSign Tech
+                </li>
+                <li className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+                  <Mail size={16} className="text-brand-500" />
+                  <a href={`mailto:${config.contact.email}`} className="break-all hover:text-brand-600 dark:hover:text-brand-300">
+                    {config.contact.email}
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div className="mt-5 flex items-center gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 text-sm font-medium text-emerald-600 dark:text-emerald-400">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              Open to opportunities
+            </div>
+            <a
+              href={config.resumeUrl}
+              download="Charan_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="focus-ring mt-3 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-gradient bg-[length:200%_auto] px-4 py-2.5 text-sm font-semibold text-white transition-[background-position] duration-500 hover:bg-right"
+            >
+              <Download size={15} /> Download CV
+            </a>
+          </BentoTile>
+        </motion.div>
+
+        {/* Now / Currently */}
+        <motion.div variants={aboutItem}>
+          <BentoTile className="h-full">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                Now <span className="text-brand-500">●</span>
+              </h3>
+              <span className="text-[10px] uppercase tracking-wider text-slate-400">{now.updated}</span>
+            </div>
+            <ul className="space-y-4">
+              {now.items.map((it) => (
+                <li key={it.title} className="flex gap-3">
+                  <span className="text-lg leading-none">{it.emoji}</span>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{it.title}</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">{it.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </BentoTile>
+        </motion.div>
+
+        {/* GitHub stats */}
+        <motion.div variants={aboutItem} className="md:col-span-2">
+          <BentoTile className="h-full">
+            <GitHubStatsCard />
+          </BentoTile>
+        </motion.div>
+
+        {/* LinkedIn — posting activity */}
+        <motion.div variants={aboutItem} className="md:col-span-3">
+          <BentoTile interactive={false} className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <div className="flex items-center gap-4">
+              <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-2xl bg-[#0a66c2] text-white shadow-lg">
+                <Linkedin size={24} />
+              </span>
+              <div>
+                <h3 className="font-bold text-slate-900 dark:text-white">I post regularly on LinkedIn</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Project posters, build logs and dev tips — follow along for what I&apos;m shipping.
+                </p>
+              </div>
+            </div>
+            <a
+              href={config.social.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="focus-ring group inline-flex flex-shrink-0 items-center gap-2 rounded-xl bg-[#0a66c2] px-5 py-2.5 font-semibold text-white transition-colors hover:bg-[#0958a8]"
+            >
+              Follow on LinkedIn
+              <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          </BentoTile>
+        </motion.div>
+      </StaggerGroup>
+    </Section>
+  );
 };
 
 export default React.memo(About);

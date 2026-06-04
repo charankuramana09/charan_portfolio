@@ -1,15 +1,22 @@
 {
     "short_name": "Charan",
-    "name": "Charan Kuramana Portfolio",
+    "name": "Charan Kuramana — Portfolio",
     "icons": [
         {
-            "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>",
-            "sizes": "64x64 32x32 24x24 16x16",
-            "type": "image/x-icon"
+            "src": "/charan_portfolio/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "/charan_portfolio/favicon.png",
+            "sizes": "512x512 256x256 192x192 64x64 32x32 16x16",
+            "type": "image/png"
         }
     ],
-    "start_url": ".",
+    "start_url": "/charan_portfolio/",
+    "scope": "/charan_portfolio/",
     "display": "standalone",
-    "theme_color": "#0f172a",
-    "background_color": "#0f172a"
+    "theme_color": "#6366f1",
+    "background_color": "#f6f7fb"
 }

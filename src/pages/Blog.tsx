@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiArrowRight, FiBookmark, FiChevronUp, FiFilter, FiTrendingUp, FiClock, FiCalendar } from 'react-icons/fi';
+import { FiSearch, FiArrowRight, FiBookmark, FiChevronUp, FiFilter, FiTrendingUp, FiClock, FiCalendar, FiLinkedin } from 'react-icons/fi';
 import { Helmet } from 'react-helmet-async';
+import { config } from '../data/config';
 
 // Utility for scroll to top
 function useBackToTopButton() {
@@ -51,8 +52,6 @@ const popularPosts = [
 
 import { blogPosts } from '../data/portfolio';
 import { Link } from 'react-router-dom';
-import GlitchText from '../shared/components/ui/GlitchText';
-import BackgroundPaths from '../shared/components/ui/BackgroundPaths';
 
 const allTags = Array.from(new Set(blogPosts.flatMap(post => post.tags)));
 
@@ -95,13 +94,10 @@ export default function Blog() {
                 <meta name="description" content="Read my latest articles on Java, React, Microservices, and software engineering career growth." />
                 <meta property="og:title" content="Blog — Charan Kuramana | Full Stack Insights" />
                 <meta property="og:description" content="Deep dives into technical topics and career advice for modern developers." />
-                <meta property="og:url" content="https://charankuramana.me/blog" />
+                <meta property="og:url" content={`${config.siteUrl}/blog`} />
             </Helmet>
             {/* 1. HERO SECTION */}
             <div className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-                {/* Floating Paths Background */}
-                <BackgroundPaths className="text-teal-200/70 dark:text-cyan-500/20" />
-
                 <div className="relative max-w-7xl mx-auto text-center z-10">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -112,12 +108,22 @@ export default function Blog() {
                             Engineering & Thoughts
                         </span>
                         <h1 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
-                            <GlitchText className="text-slate-900 dark:text-white" speed={0.8}>Insights from a</GlitchText> <br />
-                            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Full Stack Engineer</span>
+                            Insights from a <br />
+                            <span className="gradient-text">Full Stack Engineer</span>
                         </h1>
-                        <p className="max-w-2xl mx-auto text-lg text-slate-600 dark:text-slate-300 mb-10">
+                        <p className="max-w-2xl mx-auto text-lg text-slate-600 dark:text-slate-300 mb-6">
                             Deep dives into modern web development, scalable architecture, and the software engineering journey.
                         </p>
+
+                        <a
+                            href={config.social.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mb-10 inline-flex items-center gap-2 rounded-full border border-[#0a66c2]/25 bg-[#0a66c2]/10 px-4 py-2 text-sm font-medium text-[#0a66c2] transition-colors hover:bg-[#0a66c2]/15 dark:text-[#5aa1e8]"
+                        >
+                            <FiLinkedin /> I also share quick posters &amp; tips on LinkedIn — follow along
+                            <FiArrowRight />
+                        </a>
 
                         {/* Search Bar */}
                         <div className="relative max-w-2xl mx-auto shadow-xl shadow-indigo-500/10 dark:shadow-none">

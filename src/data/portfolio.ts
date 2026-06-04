@@ -100,7 +100,7 @@ export const experience = [
   {
     company: "Sathya Technologies",
     role: "Internship Trainee",
-    duration: "August 2023 – February 2024",
+    duration: "June 2023 – January 2024",
     location: "Hyderabad, India",
     employmentType: "Internship",
     companyUrl: "https://sathyatech.com/",
@@ -108,21 +108,6 @@ export const experience = [
       "Built an Employee Management System using Spring Boot and MySQL.",
     ],
     skills: ["Spring Boot", "MySQL", "Java", "REST APIs"],
-  },
-  {
-    company: "Ataritech Effective Industrial Solutions (OPC) Pvt Ltd",
-    role: "Application Engineer",
-    duration: "June 2023 – August 2023",
-    location: "Hyderabad, India",
-    employmentType: "Full Time",
-    companyUrl: "https://www.ataritech.com/",
-    bullets: [
-      "Developed WPF desktop applications using C#.",
-      "Designed UI screens for industrial machines.",
-      "Worked on real-time software-to-machine interaction.",
-      "Focused on clean, maintainable code and usability.",
-    ],
-    skills: ["C#", "WPF", "UI Design", "Industrial Systems"],
   },
   {
     company: "Novac Technology Solution",

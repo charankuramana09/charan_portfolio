@@ -10,6 +10,7 @@ export const strings = {
         home: "Home",
         about: "About",
         skills: "Skills",
+        services: "Services",
         experience: "Experience",
         certifications: "Certifications",
         projects: "Projects",

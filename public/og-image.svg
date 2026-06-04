@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#070b16"/>
+      <stop offset="1" stop-color="#0b1020"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#818cf8"/>
+      <stop offset="0.5" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="mono" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="0.55" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="90"/>
+    </filter>
+    <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="2" fill="#6366f1" opacity="0.18"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- aurora blobs -->
+  <circle cx="180" cy="120" r="240" fill="#6366f1" opacity="0.35" filter="url(#blur)"/>
+  <circle cx="1080" cy="180" r="220" fill="#8b5cf6" opacity="0.30" filter="url(#blur)"/>
+  <circle cx="980" cy="560" r="220" fill="#22d3ee" opacity="0.22" filter="url(#blur)"/>
+
+  <!-- availability pill -->
+  <g transform="translate(80,96)">
+    <rect width="290" height="44" rx="22" fill="#10b981" opacity="0.14"/>
+    <circle cx="28" cy="22" r="6" fill="#34d399"/>
+    <text x="48" y="29" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#6ee7b7">Available for opportunities</text>
+  </g>
+
+  <!-- name + title -->
+  <text x="80" y="250" font-family="Helvetica, Arial, sans-serif" font-size="76" font-weight="800" fill="#ffffff">Charan Kuramana</text>
+  <text x="80" y="330" font-family="Helvetica, Arial, sans-serif" font-size="52" font-weight="800" fill="url(#brand)">Full Stack Java &amp; React Developer</text>
+  <text x="80" y="392" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="400" fill="#94a3b8">Building scalable, secure &amp; user-focused web applications.</text>
+
+  <!-- tech chips -->
+  <g font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="600" fill="#cbd5e1">
+    <g transform="translate(80,452)">
+      <rect width="150" height="48" rx="24" fill="#ffffff" opacity="0.06"/><text x="75" y="31" text-anchor="middle">Java · Spring</text>
+    </g>
+    <g transform="translate(246,452)">
+      <rect width="170" height="48" rx="24" fill="#ffffff" opacity="0.06"/><text x="85" y="31" text-anchor="middle">React · TypeScript</text>
+    </g>
+    <g transform="translate(432,452)">
+      <rect width="180" height="48" rx="24" fill="#ffffff" opacity="0.06"/><text x="90" y="31" text-anchor="middle">Microservices · AI</text>
+    </g>
+  </g>
+
+  <!-- domain -->
+  <text x="80" y="566" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#818cf8">charankuramana.me</text>
+
+  <!-- monogram badge -->
+  <g transform="translate(940,250)">
+    <rect width="180" height="180" rx="44" fill="url(#mono)"/>
+    <rect width="180" height="90" rx="44" fill="#ffffff" opacity="0.08"/>
+    <path d="M126 58 A45 45 0 1 0 126 122" fill="none" stroke="#ffffff" stroke-width="21" stroke-linecap="round"/>
+    <circle cx="132" cy="128" r="11" fill="#ffffff"/>
+  </g>
+</svg>
